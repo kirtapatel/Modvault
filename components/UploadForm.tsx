@@ -181,12 +181,28 @@ export function UploadForm() {
     setError("");
     setSubmitting(true);
     try {
-      if (files.length === 0) throw new Error("Please add at least one MediaFire link.");
+      let list = files;
+      if (list.length === 0 && newLink.trim()) {
+        const url = newLink.trim();
+        if (!/^https?:\/\//i.test(url)) throw new Error("Please enter a full link starting with http:// or https://");
+        if (!/mediafire\.com/i.test(url)) throw new Error("Please paste a MediaFire share link (mediafire.com).");
+        list = [
+          {
+            name: newLinkName.trim() || "Mod file 1.zip",
+            url,
+            size: newLinkSize.trim() ? Number(newLinkSize.trim()) * 1024 * 1024 : 0,
+            version: newLinkVersion.trim() || "1.0",
+            gameVersion: "Any",
+          },
+        ];
+        setFiles(list);
+      }
+      if (list.length === 0) throw new Error("Please add at least one MediaFire link.");
       if (!summary.trim()) throw new Error("A short summary is required.");
       if (!description.trim()) throw new Error("A description is required.");
       if (photos.length === 0) throw new Error("At least one photo is required.");
 
-      const invalid = files.find((f) => !f.url || !/^https?:\/\//i.test(f.url));
+      const invalid = list.find((f) => !f.url || !/^https?:\/\//i.test(f.url));
       if (invalid) throw new Error(`Invalid link for "${invalid.name}". Links must start with http:// or https://`);
 
       const modResponse = await fetch("/api/mods", {
@@ -200,7 +216,7 @@ export function UploadForm() {
           gameSlug,
           subcategory,
           tags,
-          files: files.map((f) => ({
+          files: list.map((f) => ({
             version: f.version ?? "1.0",
             gameVersion: f.gameVersion ?? gameVersion,
             key: "",
@@ -420,7 +436,7 @@ export function UploadForm() {
             <a href="https://www.mediafire.com" target="_blank" rel="noopener noreferrer" className="font-semibold text-brand hover:text-brand-hover">
               MediaFire <ExternalLink className="inline h-3 w-3" />
             </a>
-            , copy the share link, then paste it below.
+            , copy the share link, then paste it below and press Enter (or click Add Link).
           </div>
 
           <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-5">
@@ -428,9 +444,17 @@ export function UploadForm() {
             <input
               value={newLink}
               onChange={(e) => setNewLink(e.target.value)}
+              onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); addLink(); } }}
               placeholder="https://www.mediafire.com/file/..."
               className="w-full rounded-xl border border-slate-700 bg-slate-800/60 px-4 py-3 text-sm text-white outline-none focus:border-brand"
             />
+            {newLink.trim() && (
+              <p className={`mt-1.5 text-xs ${/^https?:\/\//i.test(newLink.trim()) && /mediafire\.com/i.test(newLink.trim()) ? "text-emerald-400" : "text-red-400"}`}>
+                {/^https?:\/\//i.test(newLink.trim()) && /mediafire\.com/i.test(newLink.trim())
+                  ? "Valid MediaFire link — press Enter or Add Link to confirm it."
+                  : "That doesn't look like a MediaFire share link yet."}
+              </p>
+            )}
             <div className="mt-3 grid gap-3 sm:grid-cols-3">
               <div>
                 <label className="mb-1 block text-xs font-semibold text-slate-400">File name</label>

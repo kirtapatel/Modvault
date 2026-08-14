@@ -6,6 +6,8 @@ import { ModCard } from "@/components/ModCard";
 import { SearchBar } from "@/components/SearchBar";
 import { AdBanner } from "@/components/AdBanner";
 
+export const dynamic = "force-dynamic";
+
 const quickTags = ["Vehicles", "Shaders", "Quests", "Skins", "Overhaul", "4K", "Weapons"];
 
 export default async function HomePage() {
