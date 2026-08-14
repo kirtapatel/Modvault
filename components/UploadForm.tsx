@@ -15,6 +15,7 @@ import {
   ChevronRight,
   Loader2,
   ExternalLink,
+  ImagePlus,
 } from "lucide-react";
 import { GAMES } from "@/lib/types";
 
@@ -53,6 +54,9 @@ export function UploadForm() {
   const [newLinkSize, setNewLinkSize] = useState("");
   const [newLinkVersion, setNewLinkVersion] = useState("");
 
+  const [photos, setPhotos] = useState<string[]>([]);
+  const [uploadingPhotos, setUploadingPhotos] = useState(false);
+
   const game = GAMES.find((g) => g.slug === gameSlug) ?? GAMES[0];
 
   if (status === "loading") {
@@ -74,6 +78,67 @@ export function UploadForm() {
 
   function toggleTag(tag: string) {
     setTags((prev) => (prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag]));
+  }
+
+  async function compressImage(file: File): Promise<string> {
+    const dataUrl = await new Promise<string>((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = () => reject(new Error("Could not read image."));
+      reader.readAsDataURL(file);
+    });
+
+    const img = new Image();
+    await new Promise<void>((resolve, reject) => {
+      img.onload = () => resolve();
+      img.onerror = () => reject(new Error("Could not load image."));
+      img.src = dataUrl;
+    });
+
+    const MAX = 1600;
+    let { width, height } = img;
+    if (width > MAX || height > MAX) {
+      const scale = Math.min(MAX / width, MAX / height);
+      width = Math.round(width * scale);
+      height = Math.round(height * scale);
+    }
+
+    const canvas = document.createElement("canvas");
+    canvas.width = width;
+    canvas.height = height;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) throw new Error("Could not process image.");
+    ctx.drawImage(img, 0, 0, width, height);
+    return canvas.toDataURL("image/jpeg", 0.82);
+  }
+
+  async function handlePhotoFiles(files: FileList | File[]) {
+    setError("");
+    setUploadingPhotos(true);
+    try {
+      for (const file of Array.from(files)) {
+        if (!file.type.startsWith("image/")) {
+          setError("Only image files are allowed.");
+          continue;
+        }
+        const base64 = await compressImage(file);
+        const res = await fetch("/api/upload/image", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ image: base64.split(",")[1] }),
+        });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok || !data.url) {
+          setError(data.error || "Photo upload failed. Please try again.");
+          continue;
+        }
+        setPhotos((prev) => [...prev, data.url]);
+      }
+    } catch {
+      setError("Something went wrong uploading a photo.");
+    } finally {
+      setUploadingPhotos(false);
+    }
   }
 
   function addTag() {
@@ -119,6 +184,7 @@ export function UploadForm() {
       if (files.length === 0) throw new Error("Please add at least one MediaFire link.");
       if (!summary.trim()) throw new Error("A short summary is required.");
       if (!description.trim()) throw new Error("A description is required.");
+      if (photos.length === 0) throw new Error("At least one photo is required.");
 
       const invalid = files.find((f) => !f.url || !/^https?:\/\//i.test(f.url));
       if (invalid) throw new Error(`Invalid link for "${invalid.name}". Links must start with http:// or https://`);
@@ -141,7 +207,8 @@ export function UploadForm() {
             url: f.url ?? "",
             sizeBytes: f.size ?? 0,
           })),
-          thumbnailUrl: "",
+          screenshots: photos,
+          thumbnailUrl: photos[0] ?? "",
         }),
       });
       const modData = await modResponse.json();
@@ -168,7 +235,7 @@ export function UploadForm() {
     );
   }
 
-  const canNext1 = title.trim().length > 0;
+  const canNext1 = title.trim().length > 0 && photos.length > 0;
   const canNext2 = canNext1 && summary.trim().length > 0 && description.trim().length > 0;
 
   return (
@@ -257,6 +324,55 @@ export function UploadForm() {
               />
               <button type="button" onClick={addTag} className="rounded-xl bg-slate-800 px-4 text-sm font-semibold text-white hover:bg-slate-700">Add</button>
             </div>
+          </div>
+          <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-5">
+            <label className="mb-1.5 block text-sm font-semibold text-slate-300">
+              Mod photos (at least 1 required) *
+            </label>
+            <label className="flex cursor-pointer flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-brand/40 bg-brand/5 px-4 py-8 text-center transition-colors hover:border-brand hover:bg-brand/10">
+              <ImagePlus className="h-8 w-8 text-brand" />
+              <span className="text-sm font-semibold text-white">
+                {uploadingPhotos ? "Uploading photos…" : "Click to choose photos"}
+              </span>
+              <span className="text-xs text-slate-400">
+                PNG / JPG — photos are shown on your mod page (hosted on imgbb)
+              </span>
+              <input
+                type="file"
+                accept="image/*"
+                multiple
+                disabled={uploadingPhotos}
+                onChange={(e) => {
+                  if (e.target.files) handlePhotoFiles(e.target.files);
+                  e.target.value = "";
+                }}
+                className="hidden"
+              />
+            </label>
+
+            {photos.length > 0 && (
+              <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3">
+                {photos.map((url, i) => (
+                  <div key={url} className="group relative overflow-hidden rounded-xl border border-white/10">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={url} alt={`Mod photo ${i + 1}`} className="aspect-video h-full w-full object-cover" />
+                    <button
+                      type="button"
+                      onClick={() => setPhotos((prev) => prev.filter((p) => p !== url))}
+                      className="absolute right-1.5 top-1.5 rounded-full bg-slate-950/80 p-1.5 text-slate-300 transition-colors hover:bg-red-500/90 hover:text-white"
+                      aria-label={`Remove photo ${i + 1}`}
+                    >
+                      <X className="h-3.5 w-3.5" />
+                    </button>
+                    {i === 0 && (
+                      <span className="absolute bottom-1.5 left-1.5 rounded-full bg-brand/90 px-2 py-0.5 text-[10px] font-bold text-white">
+                        Cover
+                      </span>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       )}
@@ -399,7 +515,7 @@ export function UploadForm() {
         </button>
         {step < 3 ? (
           <button
-            onClick={() => { setError(""); if (step === 1 && !canNext1) { setError("Give your mod a title to continue."); return; } if (step === 2 && !canNext2) { setError("Summary and description are required."); return; } setStep((s) => (s + 1) as Step); }}
+            onClick={() => { setError(""); if (step === 1 && !canNext1) { setError(title.trim() ? "Add at least one photo to continue." : "Give your mod a title to continue."); return; } if (step === 2 && !canNext2) { setError("Summary and description are required."); return; } setStep((s) => (s + 1) as Step); }}
             className="flex items-center gap-1 rounded-xl bg-gradient-to-r from-brand to-brand-hover px-6 py-2.5 text-sm font-bold text-white shadow-lg shadow-[#1bd96a]/25 transition-all hover:brightness-110"
           >
             Continue

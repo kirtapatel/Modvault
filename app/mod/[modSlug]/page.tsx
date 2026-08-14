@@ -18,6 +18,7 @@ import { AdBanner } from "@/components/AdBanner";
 import { MarkdownView } from "@/components/MarkdownView";
 import { CommentsSection } from "@/components/CommentsSection";
 import { FavoriteButton } from "@/components/FavoriteButton";
+import { ScreenshotGallery } from "@/components/ScreenshotGallery";
 
 export async function generateMetadata({ params }: { params: Promise<{ modSlug: string }> }) {
   const { modSlug } = await params;
@@ -50,7 +51,7 @@ export default async function ModDetailPage({ params }: { params: Promise<{ modS
         <div className="space-y-8 min-w-0">
           <div className="overflow-hidden rounded-3xl border border-slate-800 bg-slate-900/60">
             <div className="relative aspect-[16/9] w-full">
-              <GameThumb gameSlug={mod.gameSlug} title={mod.title} thumbnailUrl={mod.thumbnailUrl} />
+              <GameThumb gameSlug={mod.gameSlug} title={mod.title} thumbnailUrl={mod.thumbnailUrl ?? mod.screenshots?.[0] ?? null} />
               {mod.virusChecked && (
                 <div className="absolute left-4 top-4 flex items-center gap-1.5 rounded-full bg-emerald-500/95 px-3 py-1.5 text-xs font-bold text-white shadow-lg">
                   <ExternalLink className="h-4 w-4" />
@@ -106,6 +107,8 @@ export default async function ModDetailPage({ params }: { params: Promise<{ modS
           </div>
 
           <AdBanner variant="leaderboard" />
+
+          <ScreenshotGallery images={mod.screenshots} />
 
           <div className="flex items-center justify-between rounded-2xl border border-slate-800 bg-slate-900/60 px-4 py-3">
             <span className="flex items-center gap-2 text-sm font-bold text-white">

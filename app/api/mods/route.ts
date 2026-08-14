@@ -32,13 +32,20 @@ export async function POST(request: Request) {
 
   try {
     const body = await request.json();
-    const { title, summary, description, game, gameSlug, subcategory, tags, files, thumbnailUrl } = body;
+    const { title, summary, description, game, gameSlug, subcategory, tags, files, thumbnailUrl, screenshots } = body;
 
     if (!title || !summary || !description || !game || !gameSlug || !subcategory) {
       return NextResponse.json(
         { error: "Title, summary, description, game and category are required." },
         { status: 400 }
       );
+    }
+
+    const photoList = Array.isArray(screenshots)
+      ? screenshots.filter((s: unknown) => typeof s === "string" && /^https?:\/\//i.test(s))
+      : [];
+    if (photoList.length === 0) {
+      return NextResponse.json({ error: "At least one photo is required." }, { status: 400 });
     }
 
     const conn = await connectDB();
@@ -61,7 +68,8 @@ export async function POST(request: Request) {
       game,
       gameSlug,
       subcategory,
-      thumbnailUrl: thumbnailUrl || "",
+      thumbnailUrl: thumbnailUrl || photoList[0],
+      screenshots: photoList,
       tags: Array.isArray(tags) ? tags : [],
       virusChecked: process.env.VIRUS_CHECK_ENABLED !== "false",
     });
