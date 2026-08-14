@@ -29,14 +29,7 @@ export function DownloadGate({ modId, slug, file }: { modId: string; slug: strin
       setMissingFile(true);
       return;
     }
-    const a = document.createElement("a");
-    a.href = file.url;
-    a.download = "";
-    a.target = "_blank";
-    a.rel = "noopener";
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
+    window.location.href = file.url;
   }
 
   const fileMissingDemo = file !== null && (file.url.startsWith("https://example.com"));
@@ -108,13 +101,24 @@ export function DownloadGate({ modId, slug, file }: { modId: string; slug: strin
             <>
               <p className="flex items-center justify-center gap-2 text-sm font-semibold text-emerald-400">
                 <ExternalLink className="h-4 w-4" />
-                {isMediaFire ? "Redirecting to MediaFire…" : "Download started!"}
+                {isMediaFire ? "Opening MediaFire…" : "Opening download…"}
               </p>
               <p className="mt-1 text-xs text-slate-400">
                 {isMediaFire
-                  ? "A new tab has opened with the file on MediaFire. If it didn't open, allow pop-ups and retry."
-                  : "If it didn't start, allow pop-ups and retry."}
+                  ? "If you are not redirected automatically, use the button below."
+                  : "If the download did not start, use the button below."}
               </p>
+              {file?.url && (
+                <a
+                  href={file.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-3 inline-flex items-center gap-2 rounded-xl bg-emerald-500/20 px-5 py-2.5 text-sm font-bold text-emerald-300 transition-colors hover:bg-emerald-500/30"
+                >
+                  <Download className="h-4 w-4" />
+                  Go to {isMediaFire ? "MediaFire" : "download page"}
+                </a>
+              )}
             </>
           )}
         </div>
