@@ -3,6 +3,7 @@ import Link from "next/link";
 import { SearchX } from "lucide-react";
 import { listMods } from "@/lib/data-access";
 import { ModCard } from "@/components/ModCard";
+import { ModCardSkeleton } from "@/components/ModCardSkeleton";
 import { SearchBar } from "@/components/SearchBar";
 import { AdBanner } from "@/components/AdBanner";
 
@@ -32,8 +33,12 @@ export default async function SearchPage({
 
       <SearchBar className="mb-8 max-w-2xl" />
 
+      <div className="mb-8">
+        <AdBanner variant="leaderboard" />
+      </div>
+
       {mods.length === 0 ? (
-        <div className="rounded-3xl border border-slate-800 bg-slate-900/60 p-16 text-center">
+        <div className="rounded-3xl border border-white/10 bg-slate-900/60 p-16 text-center">
           <SearchX className="mx-auto h-12 w-12 text-slate-600" />
           <h3 className="mt-4 text-lg font-bold text-white">No mods found</h3>
           <p className="mt-1 text-sm text-slate-500">
@@ -52,14 +57,22 @@ export default async function SearchPage({
                 key={o.v}
                 href={`/search?${new URLSearchParams({ ...(q ? { q } : {}), ...(tag ? { tag } : {}), sort: o.v }).toString()}`}
                 className={`rounded-lg px-3 py-1.5 text-xs font-medium transition-colors ${
-                  sort === o.v ? "bg-slate-800 text-fuchsia-400 ring-1 ring-fuchsia-500/40" : "text-slate-400 hover:bg-slate-800 hover:text-white"
+                  sort === o.v ? "bg-[#1bd96a]/15 text-[#1bd96a] ring-1 ring-[#1bd96a]/40" : "text-slate-400 hover:bg-slate-800 hover:text-white"
                 }`}
               >
                 {o.l}
               </Link>
             ))}
           </div>
-          <Suspense fallback={<p className="text-slate-400">Loading…</p>}>
+          <Suspense
+            fallback={
+              <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+                {Array.from({ length: 8 }).map((_, i) => (
+                  <ModCardSkeleton key={i} />
+                ))}
+              </div>
+            }
+          >
             <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
               {mods.map((mod) => (
                 <ModCard key={mod.id} mod={mod} />

@@ -8,7 +8,7 @@ export function ModCard({ mod }: { mod: Mod }) {
   return (
     <Link
       href={`/mod/${mod.slug}`}
-      className="glow-card flex flex-col overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/70"
+      className="glow-card flex flex-col overflow-hidden rounded-2xl border border-white/10 bg-[#161d26]"
     >
       <div className="relative aspect-[16/10] w-full">
         <GameThumb gameSlug={mod.gameSlug} title={mod.title} thumbnailUrl={mod.thumbnailUrl} />
@@ -25,7 +25,7 @@ export function ModCard({ mod }: { mod: Mod }) {
 
       <div className="flex flex-1 flex-col p-4">
         <div className="mb-1 flex items-center gap-2 text-[11px] text-slate-400">
-          <span className="rounded-md bg-violet-500/15 px-1.5 py-0.5 font-medium text-violet-300">
+          <span className="rounded-md bg-brand/15 px-1.5 py-0.5 font-medium text-brand">
             {mod.subcategory}
           </span>
           <span className="flex items-center gap-1">
@@ -33,12 +33,12 @@ export function ModCard({ mod }: { mod: Mod }) {
             {timeAgo(mod.createdAt)}
           </span>
         </div>
-        <h3 className="line-clamp-2 font-bold text-white transition-colors group-hover:text-fuchsia-300">
+        <h3 className="line-clamp-2 font-bold text-white transition-colors group-hover:text-brand">
           {mod.title}
         </h3>
         <p className="mt-1 line-clamp-2 text-sm text-slate-400">{mod.summary}</p>
 
-        <div className="mt-auto flex items-center justify-between border-t border-slate-800 pt-3 text-sm text-slate-400">
+        <div className="mt-auto flex items-center justify-between border-t border-white/10 pt-3 text-sm text-slate-400">
           <span className="flex items-center gap-1 text-emerald-400">
             <Download className="h-4 w-4" />
             {formatNumber(mod.downloads)}

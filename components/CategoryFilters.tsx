@@ -22,7 +22,7 @@ export function CategoryFilters({
               key={s}
               href={`/games/${gameSlug}${subcategory ? `?subcategory=${encodeURIComponent(subcategory)}&sort=${s}` : `?sort=${s}`}`}
               className={`rounded-lg px-3 py-2 text-sm transition-colors ${
-                active ? "bg-slate-800 text-fuchsia-400" : "text-slate-400 hover:bg-slate-800 hover:text-white"
+                active ? "bg-brand/15 text-brand" : "text-slate-400 hover:bg-slate-800 hover:text-white"
               }`}
             >
               {s === "newest" ? "Newest first" : s === "popular" ? "Most popular" : "Highest rated"}

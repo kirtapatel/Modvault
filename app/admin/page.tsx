@@ -25,7 +25,7 @@ export default async function AdminPage() {
         <p className="mt-3 text-sm text-slate-400">
           Your account is not an admin. Only approved administrators can access this panel.
         </p>
-        <Link href="/" className="mt-6 inline-block text-fuchsia-400 hover:text-fuchsia-300">
+        <Link href="/" className="mt-6 inline-block text-brand hover:text-brand-hover">
           ← Back to home
         </Link>
       </main>
@@ -47,7 +47,7 @@ export default async function AdminPage() {
         </div>
         <Link
           href="/"
-          className="rounded-lg border border-slate-700 px-4 py-2 text-sm font-medium text-slate-300 transition-colors hover:border-fuchsia-500/60 hover:text-white"
+          className="rounded-lg border border-slate-700 px-4 py-2 text-sm font-medium text-slate-300 transition-colors hover:border-brand/60 hover:text-white"
         >
           ← View site
         </Link>

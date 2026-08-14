@@ -30,7 +30,7 @@ export default async function DownloadPage({ params }: { params: Promise<{ modId
     return (
       <main className="mx-auto max-w-2xl px-4 py-24 text-center">
         <h1 className="text-2xl font-extrabold text-white">Mod not found</h1>
-        <Link href="/" className="mt-4 inline-block text-fuchsia-400 hover:text-fuchsia-300">← Back to home</Link>
+        <Link href="/" className="mt-4 inline-block text-brand hover:text-brand-hover">← Back to home</Link>
       </main>
     );
   }
@@ -38,9 +38,9 @@ export default async function DownloadPage({ params }: { params: Promise<{ modId
   return (
     <main className="mx-auto max-w-4xl px-4 py-10 sm:px-6">
       <nav className="mb-6 flex items-center gap-1.5 text-sm text-slate-400">
-        <Link href="/" className="hover:text-fuchsia-400">Home</Link>
+        <Link href="/" className="hover:text-brand">Home</Link>
         <ChevronRight className="h-4 w-4" />
-        <Link href={`/mod/${mod.slug}`} className="truncate hover:text-fuchsia-400">{mod.title}</Link>
+        <Link href={`/mod/${mod.slug}`} className="truncate hover:text-brand">{mod.title}</Link>
         <ChevronRight className="h-4 w-4" />
         <span className="text-white">Download</span>
       </nav>
@@ -58,7 +58,7 @@ export default async function DownloadPage({ params }: { params: Promise<{ modId
           </p>
         </div>
 
-        <div className="rounded-2xl border border-dashed border-fuchsia-500/40 bg-fuchsia-500/5 p-6">
+        <div className="rounded-2xl border border-dashed border-brand/40 bg-brand/5 p-6">
           <DownloadGate modId={mod.id} slug={mod.slug} file={file ?? null} />
         </div>
 

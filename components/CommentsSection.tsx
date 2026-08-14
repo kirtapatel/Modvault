@@ -68,7 +68,7 @@ export function CommentsSection({ modSlug }: { modSlug: string }) {
   return (
     <div>
       <h2 className="mb-4 flex items-center gap-2 text-lg font-bold text-white">
-        <MessageSquare className="h-5 w-5 text-fuchsia-400" />
+        <MessageSquare className="h-5 w-5 text-brand" />
         Comments ({comments.length})
       </h2>
 
@@ -77,12 +77,12 @@ export function CommentsSection({ modSlug }: { modSlug: string }) {
           value={text}
           onChange={(e) => setText(e.target.value)}
           placeholder={session ? "Share your thoughts…" : "Sign in to leave a comment"}
-          className="w-full rounded-xl border border-slate-700 bg-slate-800/60 px-4 py-3 text-sm text-white outline-none transition-colors focus:border-fuchsia-500"
+          className="w-full rounded-xl border border-slate-700 bg-slate-800/60 px-4 py-3 text-sm text-white outline-none transition-colors focus:border-brand"
         />
         <button
           type="submit"
           disabled={posting}
-          className="flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-violet-500 to-fuchsia-500 px-4 py-3 text-sm font-bold text-white transition-all hover:brightness-110 disabled:opacity-50"
+          className="flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-brand to-brand-hover px-4 py-3 text-sm font-bold text-white transition-all hover:shadow-[0_0_20px_rgba(27,217,106,0.4)] disabled:opacity-50"
         >
           {posting ? "…" : <><Send className="h-4 w-4" /> Post</>}
         </button>
@@ -97,7 +97,7 @@ export function CommentsSection({ modSlug }: { modSlug: string }) {
         <ul className="space-y-4">
           {comments.map((c) => (
             <li key={c.id} className="flex gap-3">
-              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-slate-800 text-xs font-bold text-fuchsia-300">
+              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-brand/15 text-xs font-bold text-brand">
                 {c.avatar ? (
                   <img src={c.avatar} alt={c.author} className="h-full w-full rounded-full object-cover" />
                 ) : (

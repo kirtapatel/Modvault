@@ -1,15 +1,19 @@
 @import "tailwindcss";
 
 :root {
-  --background: #020617;
+  --background: #0d1117;
   --foreground: #e2e8f0;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-inter);
   --font-mono: var(--font-geist-mono);
+  --color-brand: #1bd96a;
+  --color-brand-hover: #00af5c;
+  --color-surface: #1e2836;
+  --color-muted: #9eabb7;
 }
 
 html {
@@ -19,7 +23,7 @@ html {
 body {
   background-color: var(--background);
   color: var(--foreground);
-  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+  font-family: var(--font-inter), system-ui, Arial, Helvetica, sans-serif;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -28,32 +32,57 @@ body {
   height: 10px;
 }
 ::-webkit-scrollbar-track {
-  background: #020617;
+  background: #0d1117;
 }
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, #8b5cf6, #d946ef);
+  background: linear-gradient(180deg, #1bd96a, #00af5c);
   border-radius: 8px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #00af5c, #00994d);
 }
 
 .glow-text {
-  background: linear-gradient(135deg, #a78bfa, #e879f9);
+  background: linear-gradient(135deg, #1bd96a, #2dd4bf);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
 }
 
 .glow-card {
-  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  transition:
+    transform 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+    border-color 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 .glow-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 12px 40px -12px rgba(139, 92, 246, 0.45);
-  border-color: rgba(217, 70, 239, 0.55);
+  box-shadow: 0 12px 40px -12px rgba(27, 217, 106, 0.35);
+  border-color: rgba(27, 217, 106, 0.5);
 }
 
 @keyframes shimmer {
-  0% { background-position: -400px 0; }
-  100% { background-position: 400px 0; }
+  0% {
+    background-position: -400px 0;
+  }
+  100% {
+    background-position: 400px 0;
+  }
+}
+
+.skeleton {
+  position: relative;
+  overflow: hidden;
+  background: #1e2836;
+  border-radius: 12px;
+}
+.skeleton::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(27, 217, 106, 0.06), transparent);
+  background-size: 400px 100%;
+  animation: shimmer 1.6s infinite linear;
 }
 
 .prose-modvault h1,
@@ -78,21 +107,21 @@ body {
   list-style: decimal;
   color: #cbd5e1;
 }
-.prose-modvault a { color: #a78bfa; text-decoration: underline; }
+.prose-modvault a { color: #1bd96a; text-decoration: underline; }
 .prose-modvault strong { color: #f1f5f9; }
 .prose-modvault blockquote {
-  border-left: 3px solid #a78bfa;
+  border-left: 3px solid #1bd96a;
   padding-left: 1rem;
   margin: 0.75rem 0;
   color: #94a3b8;
   font-style: italic;
 }
 .prose-modvault code {
-  background: rgba(139, 92, 246, 0.15);
+  background: rgba(27, 217, 106, 0.12);
   padding: 0.15rem 0.4rem;
   border-radius: 0.375rem;
   font-size: 0.85em;
-  color: #e879f9;
+  color: #4ade80;
 }
 .prose-modvault pre code {
   background: transparent;
@@ -101,8 +130,8 @@ body {
 
 .bg-grid {
   background-image:
-    linear-gradient(to right, rgba(139, 92, 246, 0.08) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(139, 92, 246, 0.08) 1px, transparent 1px);
+    linear-gradient(to right, rgba(27, 217, 106, 0.07) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(27, 217, 106, 0.07) 1px, transparent 1px);
   background-size: 48px 48px;
 }
 

@@ -3,9 +3,8 @@
 import { useRef, useState } from "react";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
-import { Download, Zap, ExternalLink, FileArchive } from "lucide-react";
+import { Download, ExternalLink, FileArchive } from "lucide-react";
 import { Countdown } from "@/components/Countdown";
-import { PremiumModal } from "@/components/PremiumModal";
 import { AdBanner } from "@/components/AdBanner";
 import type { ModFile } from "@/lib/types";
 
@@ -13,7 +12,6 @@ export function DownloadGate({ modId, slug, file }: { modId: string; slug: strin
   const { status } = useSession();
   const [started, setStarted] = useState(false);
   const [downloaded, setDownloaded] = useState(false);
-  const [premiumOpen, setPremiumOpen] = useState(false);
   const [missingFile, setMissingFile] = useState(false);
   const didTrack = useRef(false);
 
@@ -39,7 +37,7 @@ export function DownloadGate({ modId, slug, file }: { modId: string; slug: strin
     <div>
       <div className="mb-6 flex flex-col items-center gap-5 sm:flex-row">
         {!started && (
-          <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-violet-500 to-fuchsia-500 shadow-xl shadow-fuchsia-500/30">
+          <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-brand to-brand-hover shadow-xl shadow-[#1bd96a]/30">
             <Download className="h-9 w-9 text-white" />
           </div>
         )}
@@ -54,39 +52,23 @@ export function DownloadGate({ modId, slug, file }: { modId: string; slug: strin
         )}
       </div>
 
-      <div className="grid gap-3 sm:grid-cols-2">
-        <button
-          onClick={() => {
-            trackAndStart();
-            setStarted(true);
-          }}
-          disabled={downloaded}
-          className="flex items-center justify-between rounded-xl border border-slate-700 bg-slate-800/70 px-4 py-3.5 text-left transition-colors hover:border-emerald-500/60"
-        >
-          <div>
-            <p className="flex items-center gap-2 font-bold text-white">
-              <Download className="h-5 w-5 text-emerald-400" />
-              Free Download
-            </p>
-            <p className="mt-0.5 text-xs text-slate-400">2 MB/s speed limit</p>
-          </div>
-          <span className="text-2xl">⬇️</span>
-        </button>
-
-        <button
-          onClick={() => setPremiumOpen(true)}
-          className="relative flex items-center justify-between rounded-xl bg-gradient-to-r from-violet-600 to-fuchsia-600 px-4 py-3.5 text-left shadow-lg shadow-fuchsia-500/30 transition-all hover:brightness-110"
-        >
-          <div>
-            <p className="flex items-center gap-2 font-bold text-white">
-              <Zap className="h-5 w-5 fill-amber-300 text-amber-300" />
-              VIP Speed
-            </p>
-            <p className="mt-0.5 text-xs text-white/70">Uncapped · No ads</p>
-          </div>
-          <span className="rounded-lg bg-white/20 px-2 py-1 text-xs font-bold text-white">$4.99/mo</span>
-        </button>
-      </div>
+      <button
+        onClick={() => {
+          trackAndStart();
+          setStarted(true);
+        }}
+        disabled={downloaded}
+        className="flex w-full items-center justify-between gap-3 rounded-xl border border-[#1bd96a]/40 bg-brand/10 px-4 py-4 text-left transition-all hover:border-brand hover:bg-brand/15 disabled:opacity-60"
+      >
+        <div>
+          <p className="flex items-center gap-2 font-bold text-white">
+            <Download className="h-5 w-5 text-brand" />
+            Free Download
+          </p>
+          <p className="mt-0.5 text-xs text-slate-400">Takes you straight to MediaFire</p>
+        </div>
+        <span className="rounded-lg bg-brand px-3 py-1.5 text-xs font-bold text-white shadow-lg shadow-[#1bd96a]/30">Free</span>
+      </button>
 
       {downloaded && (
         <div className="mt-5 rounded-xl border border-emerald-500/40 bg-emerald-500/10 p-4 text-center">
@@ -131,10 +113,10 @@ export function DownloadGate({ modId, slug, file }: { modId: string; slug: strin
       <div className="mt-5 flex items-center justify-center gap-4 text-xs text-slate-500">
         <span className="flex items-center gap-1"><FileArchive className="h-3.5 w-3.5" />Supports .zip .rar .jar files</span>
         <span className="flex items-center gap-1"><ExternalLink className="h-3.5 w-3.5" />External MediaFire link</span>
-        <Link href="/login" className="text-fuchsia-400 hover:text-fuchsia-300">Sign in for faster access</Link>
+        {status !== "authenticated" && (
+          <Link href="/login" className="text-brand hover:text-brand-hover">Sign in for faster access</Link>
+        )}
       </div>
-
-      <PremiumModal open={premiumOpen} onClose={() => setPremiumOpen(false)} />
     </div>
   );
 }

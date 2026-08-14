@@ -14,7 +14,7 @@ export function AdBanner({
 
   return (
     <div
-      className={`${sizes[variant]} mx-auto flex flex-col items-center justify-center rounded-xl border border-dashed border-slate-700 bg-slate-900/60`}
+      className={`${sizes[variant]} mx-auto flex flex-col items-center justify-center rounded-xl border border-dashed border-white/10 bg-[#161d26]`}
     >
       <p className="px-3 text-center text-[11px] font-semibold uppercase tracking-widest text-slate-500">
         {label}

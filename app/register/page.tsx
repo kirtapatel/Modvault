@@ -76,7 +76,7 @@ function RegisterForm() {
     <main className="mx-auto flex max-w-md flex-col px-4 py-16 sm:px-6">
       <div className="rounded-3xl border border-slate-800 bg-slate-900/60 p-8">
         <div className="mb-6 text-center">
-          <div className="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-violet-500 to-fuchsia-500 shadow-xl shadow-fuchsia-500/30">
+          <div className="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-brand to-brand-hover shadow-xl shadow-[#1bd96a]/30">
             <UserPlus className="h-7 w-7 text-white" />
           </div>
           <h1 className="text-2xl font-extrabold text-white">Join ModVault</h1>
@@ -97,7 +97,7 @@ function RegisterForm() {
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="e.g. ModMaster"
-              className="w-full rounded-xl border border-slate-700 bg-slate-800/60 px-4 py-3 text-sm text-white outline-none focus:border-fuchsia-500"
+              className="w-full rounded-xl border border-slate-700 bg-slate-800/60 px-4 py-3 text-sm text-white outline-none focus:border-brand"
             />
           </div>
           <div>
@@ -108,7 +108,7 @@ function RegisterForm() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="you@example.com"
-              className="w-full rounded-xl border border-slate-700 bg-slate-800/60 px-4 py-3 text-sm text-white outline-none focus:border-fuchsia-500"
+              className="w-full rounded-xl border border-slate-700 bg-slate-800/60 px-4 py-3 text-sm text-white outline-none focus:border-brand"
             />
           </div>
           <div>
@@ -119,7 +119,7 @@ function RegisterForm() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="At least 8 characters"
-              className="w-full rounded-xl border border-slate-700 bg-slate-800/60 px-4 py-3 text-sm text-white outline-none focus:border-fuchsia-500"
+              className="w-full rounded-xl border border-slate-700 bg-slate-800/60 px-4 py-3 text-sm text-white outline-none focus:border-brand"
             />
           </div>
           <div>
@@ -130,13 +130,13 @@ function RegisterForm() {
               value={confirm}
               onChange={(e) => setConfirm(e.target.value)}
               placeholder="Repeat your password"
-              className="w-full rounded-xl border border-slate-700 bg-slate-800/60 px-4 py-3 text-sm text-white outline-none focus:border-fuchsia-500"
+              className="w-full rounded-xl border border-slate-700 bg-slate-800/60 px-4 py-3 text-sm text-white outline-none focus:border-brand"
             />
           </div>
           <button
             type="submit"
             disabled={loading}
-            className="flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-violet-500 to-fuchsia-500 py-3 font-bold text-white shadow-lg shadow-fuchsia-500/25 transition-all hover:brightness-110 disabled:opacity-50"
+            className="flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-brand to-brand-hover py-3 font-bold text-white shadow-lg shadow-[#1bd96a]/25 transition-all hover:shadow-[0_0_20px_rgba(27,217,106,0.4)] disabled:opacity-50"
           >
             {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <UserPlus className="h-4 w-4" />}
             {loading ? "Creating account…" : "Create Account"}
@@ -145,7 +145,7 @@ function RegisterForm() {
 
         <p className="mt-6 text-center text-sm text-slate-400">
           Already have an account?{" "}
-          <Link href={`/login?callbackUrl=${encodeURIComponent(callbackUrl)}`} className="font-semibold text-fuchsia-400 hover:text-fuchsia-300">
+          <Link href={`/login?callbackUrl=${encodeURIComponent(callbackUrl)}`} className="font-semibold text-brand hover:text-brand-hover">
             Sign in
           </Link>
         </p>

@@ -6,7 +6,6 @@ import {
   User,
   Tag,
   ChevronRight,
-  Heart,
   Share2,
   Calendar,
   Boxes,
@@ -40,9 +39,9 @@ export default async function ModDetailPage({ params }: { params: Promise<{ modS
   return (
     <main className="mx-auto max-w-7xl px-4 py-10 sm:px-6">
       <nav className="mb-6 flex flex-wrap items-center gap-1.5 text-sm text-slate-400">
-        <Link href="/" className="hover:text-fuchsia-400">Home</Link>
+        <Link href="/" className="hover:text-brand">Home</Link>
         <ChevronRight className="h-4 w-4" />
-        <Link href={`/games/${mod.gameSlug}`} className="hover:text-fuchsia-400">{mod.game}</Link>
+        <Link href={`/games/${mod.gameSlug}`} className="hover:text-brand">{mod.game}</Link>
         <ChevronRight className="h-4 w-4" />
         <span className="text-white">{mod.title}</span>
       </nav>
@@ -64,8 +63,8 @@ export default async function ModDetailPage({ params }: { params: Promise<{ modS
                 <div>
                   <h1 className="text-2xl font-extrabold text-white sm:text-3xl">{mod.title}</h1>
                   <div className="mt-2 flex items-center gap-3 text-sm text-slate-400">
-                    <span className="rounded-md bg-violet-500/15 px-2 py-0.5 text-xs font-semibold text-violet-300">{mod.game}</span>
-                    <span className="rounded-md bg-fuchsia-500/15 px-2 py-0.5 text-xs font-semibold text-fuchsia-300">{mod.subcategory}</span>
+                    <span className="rounded-md bg-brand/15 px-2 py-0.5 text-xs font-semibold text-brand">{mod.game}</span>
+                    <span className="rounded-md bg-brand/15 px-2 py-0.5 text-xs font-semibold text-brand">{mod.subcategory}</span>
                     <span className="flex items-center gap-1"><Calendar className="h-3.5 w-3.5" />{formatDate(mod.createdAt)}</span>
                   </div>
                   <div className="mt-3 flex items-center gap-2">
@@ -80,7 +79,7 @@ export default async function ModDetailPage({ params }: { params: Promise<{ modS
                 </div>
                 <div className="flex gap-2">
                   <FavoriteButton modId={mod.id} slug={mod.slug} />
-                  <button className="flex items-center gap-1.5 rounded-lg border border-slate-700 px-3 py-2 text-sm font-medium text-slate-300 transition-colors hover:border-fuchsia-500/60 hover:text-white">
+                  <button className="flex items-center gap-1.5 rounded-lg border border-slate-700 px-3 py-2 text-sm font-medium text-slate-300 transition-colors hover:border-brand/60 hover:text-white">
                     <Share2 className="h-4 w-4" />
                     Share
                   </button>
@@ -96,7 +95,7 @@ export default async function ModDetailPage({ params }: { params: Promise<{ modS
                     <Link
                       key={t}
                       href={`/search?q=${encodeURIComponent(t)}`}
-                      className="rounded-full border border-slate-700 bg-slate-800/80 px-3 py-1 text-xs text-slate-300 transition-colors hover:border-fuchsia-500/60 hover:text-white"
+                      className="rounded-full border border-slate-700 bg-slate-800/80 px-3 py-1 text-xs text-slate-300 transition-colors hover:border-brand/60 hover:text-white"
                     >
                       {t}
                     </Link>
@@ -106,21 +105,21 @@ export default async function ModDetailPage({ params }: { params: Promise<{ modS
             </div>
           </div>
 
+          <AdBanner variant="leaderboard" />
+
           <div className="flex items-center justify-between rounded-2xl border border-slate-800 bg-slate-900/60 px-4 py-3">
             <span className="flex items-center gap-2 text-sm font-bold text-white">
-              <Download className="h-5 w-5 text-fuchsia-400" />
+              <Download className="h-5 w-5 text-brand" />
               Download {mod.title}
             </span>
             <Link
               href={`/download/${mod.id}`}
-              className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-violet-500 to-fuchsia-500 px-5 py-2.5 font-bold text-white shadow-lg shadow-fuchsia-500/25 transition-all hover:brightness-110"
+              className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-brand to-brand-hover px-5 py-2.5 font-bold text-white shadow-lg shadow-[#1bd96a]/30 transition-all hover:shadow-[0_0_20px_rgba(27,217,106,0.4)]"
             >
               <Download className="h-5 w-5" />
               Free Download
             </Link>
           </div>
-
-          <AdBanner variant="leaderboard" />
 
           <div className="rounded-3xl border border-slate-800 bg-slate-900/60 p-6">
             <div className="mb-4 flex gap-2 border-b border-slate-800 pb-3">
@@ -156,7 +155,7 @@ export default async function ModDetailPage({ params }: { params: Promise<{ modS
                     </div>
                     <Link
                       href={`/download/${mod.id}`}
-                      className="flex items-center gap-1.5 rounded-lg bg-slate-800 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-fuchsia-600"
+                      className="flex items-center gap-1.5 rounded-lg bg-brand/15 px-4 py-2 text-sm font-semibold text-brand transition-colors hover:bg-brand/25"
                     >
                       <Download className="h-4 w-4" />
                       Download
@@ -170,12 +169,14 @@ export default async function ModDetailPage({ params }: { params: Promise<{ modS
               <CommentsSection modSlug={mod.slug} />
             </div>
           </div>
+
+          <AdBanner variant="box" />
         </div>
 
         <aside className="space-y-5">
           <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-5">
             <div className="flex items-center gap-3">
-              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-violet-500 to-fuchsia-500 text-lg font-extrabold text-white">
+              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-brand to-teal-400 text-lg font-extrabold text-white">
                 {mod.creator.avatar ? (
                   <img src={mod.creator.avatar} alt={mod.creator.name} className="h-full w-full rounded-full object-cover" />
                 ) : (
@@ -184,7 +185,7 @@ export default async function ModDetailPage({ params }: { params: Promise<{ modS
               </div>
               <div>
                 <p className="flex items-center gap-1 font-bold text-white">
-                  <User className="h-3.5 w-3.5 text-violet-400" />
+                  <User className="h-3.5 w-3.5 text-brand" />
                   {mod.creator.name}
                 </p>
                 <p className="text-xs text-slate-500">Creator</p>
@@ -207,23 +208,6 @@ export default async function ModDetailPage({ params }: { params: Promise<{ modS
                 )}
               </div>
             )}
-          </div>
-
-          <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-5">
-            <h3 className="mb-3 flex items-center gap-2 text-sm font-bold text-white">
-              <Download className="h-4 w-4 text-emerald-400" />
-              Speed Options
-            </h3>
-            <div className="space-y-2">
-              <div className="flex items-center justify-between rounded-lg border border-slate-800 px-3 py-2.5 text-sm">
-                <span className="text-slate-300">Free</span>
-                <span className="font-semibold text-emerald-400">2 MB/s limit</span>
-              </div>
-              <div className="flex items-center justify-between rounded-lg border border-fuchsia-500/40 bg-fuchsia-500/10 px-3 py-2.5 text-sm">
-                <span className="font-semibold text-fuchsia-300">VIP</span>
-                <span className="font-semibold text-white">Uncapped</span>
-              </div>
-            </div>
           </div>
 
           <AdBanner variant="box" />

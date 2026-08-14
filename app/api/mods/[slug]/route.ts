@@ -5,6 +5,9 @@ import { getModBySlug } from "@/lib/data-access";
 import Mod from "@/models/Mod";
 import ModFile from "@/models/ModFile";
 
+const FILE_URL_RE = /^https?:\/\//i;
+const MEDIAFIRE_RE = /mediafire\.com/i;
+
 export async function GET(_request: Request, { params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const mod = await getModBySlug(slug);
@@ -51,6 +54,37 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ sl
   for (const key of updatable) {
     if (body[key] !== undefined) (mod as any)[key] = body[key];
   }
+
+  if (body.fileUrl !== undefined) {
+    const url = typeof body.fileUrl === "string" ? body.fileUrl.trim() : "";
+    if (!url) {
+      return NextResponse.json({ error: "Please enter a MediaFire link." }, { status: 400 });
+    }
+    if (!FILE_URL_RE.test(url) || !MEDIAFIRE_RE.test(url)) {
+      return NextResponse.json({ error: "Please enter a valid MediaFire link." }, { status: 400 });
+    }
+
+    const conn = await connectDB();
+    if (!conn) {
+      return NextResponse.json({ error: "Database not configured." }, { status: 503 });
+    }
+
+    const file = await ModFile.findOne({ mod: mod._id });
+    if (file) {
+      file.url = url;
+      await file.save();
+    } else {
+      await ModFile.create({
+        mod: mod._id,
+        version: "1.0",
+        gameVersion: "Any",
+        key: "",
+        url,
+        sizeBytes: 0,
+      });
+    }
+  }
+
   await mod.save();
 
   return NextResponse.json({ ok: true });

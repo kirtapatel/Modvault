@@ -216,7 +216,7 @@ export function AdminPanel() {
             onClick={() => setTab(t.id)}
             className={`flex shrink-0 items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition-colors lg:w-full ${
               tab === t.id
-                ? "bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white"
+                ? "bg-gradient-to-r from-brand to-brand-hover text-white"
                 : "text-slate-400 hover:bg-slate-800 hover:text-white"
             }`}
           >
@@ -244,10 +244,10 @@ export function AdminPanel() {
               <div>
                 <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
                   {[
-                    { label: "Total Mods", value: formatNumber(stats.mods), icon: Boxes, color: "text-violet-400" },
+                    { label: "Total Mods", value: formatNumber(stats.mods), icon: Boxes, color: "text-brand" },
                     { label: "Total Users", value: formatNumber(stats.users), icon: Users, color: "text-sky-400" },
                     { label: "Admins", value: formatNumber(stats.admins), icon: ShieldCheck, color: "text-emerald-400" },
-                    { label: "Total Downloads", value: formatNumber(stats.downloads), icon: LayoutDashboard, color: "text-fuchsia-400" },
+                    { label: "Total Downloads", value: formatNumber(stats.downloads), icon: LayoutDashboard, color: "text-brand" },
                   ].map(({ label, value, icon: Icon, color }) => (
                     <div key={label} className="rounded-2xl border border-slate-800 bg-slate-900/60 p-5">
                       <Icon className={`h-6 w-6 ${color}`} />
@@ -259,7 +259,7 @@ export function AdminPanel() {
 
                 <div className="mt-8">
                   <h3 className="mb-3 flex items-center gap-2 text-lg font-bold text-white">
-                    <Boxes className="h-5 w-5 text-fuchsia-400" /> Latest Uploads
+                    <Boxes className="h-5 w-5 text-brand" /> Latest Uploads
                   </h3>
                   <div className="rounded-2xl border border-slate-800 bg-slate-900/60">
                     {stats.latestMods.length === 0 ? (
@@ -292,7 +292,7 @@ export function AdminPanel() {
                       value={search}
                       onChange={(e) => setSearch(e.target.value)}
                       placeholder="Search mods…"
-                      className="w-full rounded-xl border border-slate-700 bg-slate-800/60 py-2 pl-9 pr-3 text-sm text-white outline-none focus:border-fuchsia-500"
+                      className="w-full rounded-xl border border-slate-700 bg-slate-800/60 py-2 pl-9 pr-3 text-sm text-white outline-none focus:border-brand"
                     />
                   </div>
                 </div>
@@ -328,7 +328,7 @@ export function AdminPanel() {
                                     value={editingLink}
                                     onChange={(e) => setEditingLink(e.target.value)}
                                     placeholder="https://www.mediafire.com/file/..."
-                                    className="min-w-0 flex-1 rounded-lg border border-slate-700 bg-slate-800/60 px-2.5 py-1.5 text-xs text-white outline-none focus:border-fuchsia-500"
+                                    className="min-w-0 flex-1 rounded-lg border border-slate-700 bg-slate-800/60 px-2.5 py-1.5 text-xs text-white outline-none focus:border-brand"
                                     aria-label={`MediaFire link for ${m.title}`}
                                   />
                                   <button
@@ -346,7 +346,7 @@ export function AdminPanel() {
                                       href={m.mediaFireUrl}
                                       target="_blank"
                                       rel="noopener noreferrer"
-                                      className="flex min-w-0 items-center gap-1 truncate text-xs text-fuchsia-300 hover:text-fuchsia-200"
+                                      className="flex min-w-0 items-center gap-1 truncate text-xs text-brand hover:text-brand-hover"
                                       title={m.mediaFireUrl}
                                     >
                                       <ExternalLink className="h-3.5 w-3.5 shrink-0" />
@@ -401,7 +401,6 @@ export function AdminPanel() {
                       <thead>
                         <tr className="border-b border-slate-800 text-xs uppercase tracking-wider text-slate-500">
                           <th className="px-4 py-3">User</th>
-                          <th className="px-4 py-3">VIP</th>
                           <th className="px-4 py-3">Joined</th>
                           <th className="px-4 py-3 text-right">Actions</th>
                         </tr>
@@ -412,15 +411,6 @@ export function AdminPanel() {
                             <td className="px-4 py-3">
                               <p className="font-semibold text-white">{u.name}</p>
                               <p className="text-xs text-slate-500">{u.email}</p>
-                            </td>
-                            <td className="px-4 py-3">
-                              {u.isPremium ? (
-                                <span className="inline-flex items-center gap-1 rounded-full bg-fuchsia-500/15 px-2 py-0.5 text-xs font-bold text-fuchsia-300">
-                                  <Crown className="h-3 w-3" /> VIP
-                                </span>
-                              ) : (
-                                <span className="text-xs text-slate-600">—</span>
-                              )}
                             </td>
                             <td className="px-4 py-3 text-slate-400">{timeAgo(u.createdAt)}</td>
                             <td className="px-4 py-3 text-right">
@@ -455,12 +445,12 @@ export function AdminPanel() {
                       onChange={(e) => setNewAdminEmail(e.target.value)}
                       placeholder="admin@example.com"
                       disabled={!isOwner}
-                      className="flex-1 rounded-xl border border-slate-700 bg-slate-800/60 px-4 py-2.5 text-sm text-white outline-none focus:border-fuchsia-500 disabled:opacity-40"
+                      className="flex-1 rounded-xl border border-slate-700 bg-slate-800/60 px-4 py-2.5 text-sm text-white outline-none focus:border-brand disabled:opacity-40"
                     />
                     <button
                       onClick={addAdmin}
                       disabled={busy || !isOwner}
-                      className="flex items-center justify-center gap-1.5 rounded-xl bg-gradient-to-r from-violet-500 to-fuchsia-500 px-5 py-2.5 text-sm font-bold text-white shadow-lg shadow-fuchsia-500/25 transition-all hover:brightness-110 disabled:opacity-40"
+                      className="flex items-center justify-center gap-1.5 rounded-xl bg-gradient-to-r from-brand to-brand-hover px-5 py-2.5 text-sm font-bold text-white shadow-lg shadow-[#1bd96a]/25 transition-all hover:brightness-110 disabled:opacity-40"
                     >
                       <Plus className="h-4 w-4" /> Add Admin
                     </button>
@@ -501,7 +491,7 @@ export function AdminPanel() {
         )}
 
         <div className="mt-8 flex items-center justify-end">
-          <a href="/" className="flex items-center gap-1 text-sm text-slate-500 transition-colors hover:text-fuchsia-400">
+          <a href="/" className="flex items-center gap-1 text-sm text-slate-500 transition-colors hover:text-brand">
             Back to site <ChevronRight className="h-3.5 w-3.5" />
           </a>
         </div>

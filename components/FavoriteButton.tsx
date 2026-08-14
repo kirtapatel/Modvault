@@ -35,7 +35,7 @@ export function FavoriteButton({ modId, slug }: { modId: string; slug: string })
       className={`flex items-center gap-1.5 rounded-lg border px-3 py-2 text-sm font-medium transition-colors ${
         active
           ? "border-rose-500/60 bg-rose-500/15 text-rose-400"
-          : "border-slate-700 text-slate-300 hover:border-rose-500/60 hover:text-rose-400"
+          : "border-white/10 text-slate-300 hover:border-rose-500/60 hover:text-rose-400"
       }`}
     >
       <Heart className={`h-4 w-4 ${active ? "fill-rose-400" : ""}`} />

@@ -39,13 +39,13 @@ export function Countdown({ seconds, onComplete }: { seconds: number; onComplete
           />
           <defs>
             <linearGradient id="countdownGrad" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stopColor="#8b5cf6" />
-              <stop offset="100%" stopColor="#d946ef" />
+              <stop offset="0%" stopColor="#1bd96a" />
+              <stop offset="100%" stopColor="#00af5c" />
             </linearGradient>
           </defs>
         </svg>
         <div className="absolute flex flex-col items-center">
-          <Timer className="mb-0.5 h-3 w-3 text-fuchsia-400" />
+          <Timer className="mb-0.5 h-3 w-3 text-brand" />
           <span className="text-2xl font-extrabold text-white">{remaining}</span>
         </div>
       </div>
