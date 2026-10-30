@@ -14,6 +14,10 @@
   --color-brand-hover: #00af5c;
   --color-surface: #1e2836;
   --color-muted: #9eabb7;
+  --color-neon-cyan: #22d3ee;
+  --color-neon-mint: #7dffc4;
+  --color-neon-violet: #8b5cf6;
+  --color-void: #070c0e;
 }
 
 html {
@@ -21,10 +25,15 @@ html {
 }
 
 body {
-  background-color: var(--background);
+  background-color: var(--color-void);
+  background-image:
+    radial-gradient(ellipse 70% 50% at 18% -12%, rgba(27, 217, 106, 0.16), transparent 60%),
+    radial-gradient(ellipse 60% 45% at 85% -8%, rgba(34, 211, 238, 0.12), transparent 55%),
+    linear-gradient(180deg, #070c0e 0%, #080f12 45%, #070c0e 100%);
   color: var(--foreground);
   font-family: var(--font-inter), system-ui, Arial, Helvetica, sans-serif;
   -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
 }
 
 ::-webkit-scrollbar {
@@ -137,3 +146,171 @@ body {
 
 .no-scrollbar::-webkit-scrollbar { display: none; }
 .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* ── 3D / glassmorphism layer ─────────────────────────────────────────── */
+
+.glass-panel {
+  background: linear-gradient(
+    155deg,
+    rgba(255, 255, 255, 0.075) 0%,
+    rgba(255, 255, 255, 0.025) 45%,
+    rgba(27, 217, 106, 0.035) 100%
+  );
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(18px) saturate(130%);
+  -webkit-backdrop-filter: blur(18px) saturate(130%);
+}
+
+.glass-card {
+  background: linear-gradient(
+    160deg,
+    rgba(16, 26, 29, 0.82) 0%,
+    rgba(10, 17, 20, 0.68) 100%
+  );
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  backdrop-filter: blur(14px) saturate(125%);
+  -webkit-backdrop-filter: blur(14px) saturate(125%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    0 24px 60px -32px rgba(0, 0, 0, 0.9);
+}
+
+.tilt-card {
+  position: relative;
+  perspective: 1000px;
+  transform-style: preserve-3d;
+}
+
+.tilt-card-inner {
+  position: relative;
+  z-index: 1;
+  height: 100%;
+  transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+  transform-style: preserve-3d;
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
+}
+
+.tilt-card:hover .tilt-card-inner {
+  transition-duration: 0.08s;
+}
+
+.tilt-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  background: radial-gradient(
+    260px circle at var(--mx, 50%) var(--my, 50%),
+    rgba(27, 217, 106, 0.2),
+    rgba(34, 211, 238, 0.08) 38%,
+    transparent 68%
+  );
+  mix-blend-mode: screen;
+}
+
+.tilt-card:hover::after {
+  opacity: 1;
+}
+
+.tilt-depth {
+  transform: translateZ(34px);
+}
+
+.vault-stage {
+  filter: drop-shadow(0 30px 60px rgba(0, 0, 0, 0.55));
+}
+
+.game-token {
+  isolation: isolate;
+}
+
+.game-token::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg, rgba(27, 217, 106, 0.65), rgba(34, 211, 238, 0.25), transparent 65%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.game-token:hover::before {
+  opacity: 1;
+}
+
+/* ── Intro loader ─────────────────────────────────────────────────────── */
+
+@keyframes vault-ring {
+  0% {
+    transform: rotate(0deg) scale(0.92);
+    opacity: 0.45;
+  }
+  50% {
+    transform: rotate(180deg) scale(1.04);
+    opacity: 1;
+  }
+  100% {
+    transform: rotate(360deg) scale(0.92);
+    opacity: 0.45;
+  }
+}
+
+@keyframes loader-sweep {
+  0% {
+    transform: translateX(-110%) scaleX(0.4);
+  }
+  100% {
+    transform: translateX(110%) scaleX(1);
+  }
+}
+
+@keyframes float-slow {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-9px);
+  }
+}
+
+.vault-ring {
+  animation: vault-ring 2.1s linear infinite;
+}
+
+.loader-sweep {
+  animation: loader-sweep 1.25s ease-in-out infinite;
+}
+
+.float-slow {
+  animation: float-slow 6s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+  .tilt-card-inner {
+    transform: none !important;
+  }
+  .tilt-card::after {
+    display: none;
+  }
+}

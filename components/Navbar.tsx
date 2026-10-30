@@ -21,7 +21,7 @@ export function Navbar() {
   const [open, setOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-50 border-b border-white/10 bg-[#12181f]/90 backdrop-blur-xl">
+    <header className="sticky top-0 z-50 border-b border-white/10 bg-[#0a1013]/80 backdrop-blur-2xl">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6">
         <Link href="/" className="flex items-center gap-2.5 transition-opacity hover:opacity-80">
           <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-brand to-brand-hover shadow-lg shadow-[#1bd96a]/30">
