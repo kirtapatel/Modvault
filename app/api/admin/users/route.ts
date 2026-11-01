@@ -3,6 +3,7 @@ import { auth } from "@/lib/auth";
 import { isAdminSession } from "@/lib/admin";
 import { connectDB } from "@/lib/mongodb";
 import User from "@/models/User";
+import type { LeanUserPublic } from "@/lib/mongo-types";
 
 export async function GET(request: Request) {
   const session = await auth();
@@ -21,20 +22,20 @@ export async function GET(request: Request) {
 
   try {
     const total = await User.countDocuments();
-    const docs = await User.find()
+    const docs = (await User.find()
       .sort({ createdAt: -1 })
       .skip((page - 1) * perPage)
       .limit(perPage)
-      .lean();
+      .lean()) as unknown as LeanUserPublic[];
 
     return NextResponse.json({
-      users: docs.map((u: any) => ({
+      users: docs.map((u) => ({
         id: String(u._id),
         name: u.name,
         email: u.email,
         isPremium: u.isPremium,
         modCount: 0,
-        createdAt: (u.createdAt || new Date()).toISOString(),
+        createdAt: new Date(u.createdAt || Date.now()).toISOString(),
       })),
       total,
       page,

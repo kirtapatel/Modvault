@@ -5,6 +5,7 @@ import { connectDB } from "@/lib/mongodb";
 import Mod from "@/models/Mod";
 import User from "@/models/User";
 import Admin from "@/models/Admin";
+import type { LeanMod } from "@/lib/mongo-types";
 
 export async function GET() {
   const session = await auth();
@@ -31,24 +32,24 @@ export async function GET() {
       Mod.aggregate([{ $group: { _id: null, total: { $sum: "$downloads" } } }]),
     ]);
 
-    const latestMods = await Mod.find()
+    const latestMods = (await Mod.find()
       .sort({ createdAt: -1 })
       .limit(5)
       .populate("creator", "name email")
-      .lean();
+      .lean()) as unknown as LeanMod[];
 
     return NextResponse.json({
       mods,
       users,
       admins: admins + 1,
       downloads: agg[0]?.total ?? 0,
-      latestMods: latestMods.map((m: any) => ({
+      latestMods: latestMods.map((m) => ({
         id: String(m._id),
         title: m.title,
         slug: m.slug,
         game: m.game,
         downloads: m.downloads || 0,
-        createdAt: (m.createdAt || new Date()).toISOString(),
+        createdAt: new Date(m.createdAt || Date.now()).toISOString(),
         creatorName: m.creator?.name ?? "Unknown",
       })),
     });

@@ -4,9 +4,10 @@ import ModFile from "@/models/ModFile";
 import User from "@/models/User";
 import { demoMods } from "@/lib/demo-data";
 import type { Creator, Mod as ModType, ModFile as ModFileType } from "@/lib/types";
+import type { LeanMod, LeanModFile, LeanUserPublic } from "@/lib/mongo-types";
 import { GAMES } from "@/lib/types";
 
-function toFile(doc: any): ModFileType {
+function toFile(doc: LeanModFile): ModFileType {
   return {
     id: String(doc._id),
     version: doc.version,
@@ -16,7 +17,7 @@ function toFile(doc: any): ModFileType {
   };
 }
 
-function toCreator(doc: any): Creator {
+function toCreator(doc: LeanUserPublic): Creator {
   return {
     id: String(doc._id),
     name: doc.name || "Creator",
@@ -27,7 +28,7 @@ function toCreator(doc: any): Creator {
   };
 }
 
-function toMod(doc: any, files: any[] = []): ModType {
+function toMod(doc: LeanMod, files: LeanModFile[] = []): ModType {
   return {
     id: String(doc._id),
     slug: doc.slug,
@@ -41,10 +42,10 @@ function toMod(doc: any, files: any[] = []): ModType {
     thumbnailUrl: doc.thumbnailUrl || null,
     tags: doc.tags || [],
     downloads: doc.downloads || 0,
-    rating: doc.rating ?? (doc.ratingValue && doc.ratingCount ? doc.ratingValue / doc.ratingCount : 0),
+    rating: doc.ratingValue && doc.ratingCount ? doc.ratingValue / doc.ratingCount : 0,
     ratingCount: doc.ratingCount || 0,
     virusChecked: doc.virusChecked !== false,
-    createdAt: (doc.createdAt || new Date()).toISOString(),
+    createdAt: new Date(doc.createdAt || Date.now()).toISOString(),
     files: files.map(toFile),
     screenshots: doc.screenshots || [],
   };
@@ -82,7 +83,11 @@ export async function listMods({
     return out.slice(0, limit);
   }
 
-  const filter: Record<string, any> = {};
+  const filter: {
+    gameSlug?: string;
+    subcategory?: string;
+    tags?: string;
+  } = {};
   if (gameSlug) filter.gameSlug = gameSlug;
   if (subcategory) filter.subcategory = subcategory;
   if (tag) filter.tags = tag;

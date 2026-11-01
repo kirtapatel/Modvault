@@ -1,17 +1,19 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { Heart } from "lucide-react";
 
 export function FavoriteButton({ modId, slug }: { modId: string; slug: string }) {
+  const router = useRouter();
   const { status } = useSession();
   const [active, setActive] = useState(false);
   const [busy, setBusy] = useState(false);
 
   async function toggle() {
     if (status !== "authenticated") {
-      window.location.href = `/login?callbackUrl=/mod/${slug}`;
+      router.push(`/login?callbackUrl=/mod/${slug}`);
       return;
     }
     if (busy) return;
@@ -32,13 +34,13 @@ export function FavoriteButton({ modId, slug }: { modId: string; slug: string })
   return (
     <button
       onClick={toggle}
-      className={`flex items-center gap-1.5 rounded-lg border px-3 py-2 text-sm font-medium transition-colors ${
+      className={`flex items-center gap-1.5 rounded-xl border px-3 py-2 text-sm font-medium transition-colors ${
         active
-          ? "border-rose-500/60 bg-rose-500/15 text-rose-400"
-          : "border-white/10 text-slate-300 hover:border-rose-500/60 hover:text-rose-400"
+          ? "border-brand/50 bg-brand/15 text-brand-bright"
+          : "border-white/10 text-white/70 hover:border-brand/50 hover:text-brand-bright"
       }`}
     >
-      <Heart className={`h-4 w-4 ${active ? "fill-rose-400" : ""}`} />
+      <Heart className={`h-4 w-4 ${active ? "fill-brand-bright" : ""}`} />
       {active ? "Favorited" : "Favorite"}
     </button>
   );

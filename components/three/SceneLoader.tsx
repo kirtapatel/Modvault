@@ -39,17 +39,17 @@ export function SceneLoader() {
 
   return (
     <div
-      className={`pointer-events-none fixed inset-0 z-[100] flex flex-col items-center justify-center bg-[#050a0c]/95 backdrop-blur-xl transition-opacity duration-500 ${
+      className={`pointer-events-none fixed inset-0 z-[100] flex flex-col items-center justify-center bg-[#020202]/95 backdrop-blur-xl transition-opacity duration-500 ${
         leaving ? "opacity-0" : "opacity-100"
       }`}
       role="status"
       aria-live="polite"
     >
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_45%,rgba(27,217,106,0.16),transparent_45%)]" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_45%,rgba(191,68,23,0.16),transparent_45%)]" />
 
       <div className="relative flex h-28 w-28 items-center justify-center">
         <div className="absolute inset-0 rounded-full border border-brand/25" />
-        <div className="vault-ring absolute inset-2 rounded-full border-2 border-transparent border-r-neon-cyan border-t-brand" />
+        <div className="vault-ring absolute inset-2 rounded-full border-2 border-transparent border-r-brand-bright border-t-brand" />
         <div className="absolute inset-5 rounded-full bg-brand/15 blur-xl" />
         <Boxes className="relative h-8 w-8 text-brand" />
       </div>
@@ -59,7 +59,7 @@ export function SceneLoader() {
       </p>
 
       <div className="mt-5 h-1 w-52 overflow-hidden rounded-full bg-white/10">
-        <div className="loader-sweep h-full w-1/2 rounded-full bg-gradient-to-r from-transparent via-brand to-neon-cyan" />
+        <div className="loader-sweep h-full w-1/2 rounded-full bg-gradient-to-r from-transparent via-brand to-brand-bright" />
       </div>
 
       <span className="sr-only">Loading the 3D experience</span>

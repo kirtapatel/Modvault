@@ -25,7 +25,7 @@ export default async function SearchPage({
     <main className="mx-auto max-w-7xl px-4 py-10 sm:px-6">
       <h1 className="mb-6 text-2xl font-extrabold text-white">
         {q ? (
-          <>Search results for <span className="glow-text">"{q}"</span></>
+          <>Search results for <span className="glow-text">&quot;{q}&quot;</span></>
         ) : (
           "Search Mods"
         )}
@@ -38,15 +38,15 @@ export default async function SearchPage({
       </div>
 
       {mods.length === 0 ? (
-        <div className="rounded-3xl border border-white/10 bg-slate-900/60 p-16 text-center">
-          <SearchX className="mx-auto h-12 w-12 text-slate-600" />
+        <div className="glass-card rounded-3xl p-16 text-center">
+          <SearchX className="mx-auto h-12 w-12 text-white/25" />
           <h3 className="mt-4 text-lg font-bold text-white">No mods found</h3>
-          <p className="mt-1 text-sm text-slate-500">
+          <p className="mt-1 text-sm text-white/35">
             Try a different search term, or check the game category pages.
           </p>
           <div className="mt-6 flex justify-center gap-3">
-            <Link href="/games/gtav" className="rounded-lg bg-slate-800 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-700">Browse GTA 5</Link>
-            <Link href="/games/minecraft" className="rounded-lg bg-slate-800 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-700">Browse Minecraft</Link>
+            <Link href="/games/gtav" className="rounded-lg bg-white/[0.06] px-4 py-2 text-sm font-semibold text-white hover:bg-white/[0.08]">Browse GTA 5</Link>
+            <Link href="/games/minecraft" className="rounded-lg bg-white/[0.06] px-4 py-2 text-sm font-semibold text-white hover:bg-white/[0.08]">Browse Minecraft</Link>
           </div>
         </div>
       ) : (
@@ -57,7 +57,7 @@ export default async function SearchPage({
                 key={o.v}
                 href={`/search?${new URLSearchParams({ ...(q ? { q } : {}), ...(tag ? { tag } : {}), sort: o.v }).toString()}`}
                 className={`rounded-lg px-3 py-1.5 text-xs font-medium transition-colors ${
-                  sort === o.v ? "bg-[#1bd96a]/15 text-[#1bd96a] ring-1 ring-[#1bd96a]/40" : "text-slate-400 hover:bg-slate-800 hover:text-white"
+                  sort === o.v ? "bg-brand/15 text-brand-bright ring-1 ring-brand/40" : "text-white/50 hover:bg-white/[0.06] hover:text-white"
                 }`}
               >
                 {o.l}

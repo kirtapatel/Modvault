@@ -14,10 +14,10 @@ export default function DashboardPage() {
       <h1 className="mb-3 text-3xl font-extrabold text-white">
         Creator <span className="glow-text">Dashboard</span>
       </h1>
-      <p className="mb-8 text-sm text-slate-400">
+      <p className="mb-8 text-sm text-white/50">
         Manage your profile, uploaded mods and saved favorites.
       </p>
-      <Suspense fallback={<p className="text-slate-400">Loading dashboard…</p>}>
+      <Suspense fallback={<p className="text-white/50">Loading dashboard…</p>}>
         <DashboardContent />
       </Suspense>
       <div className="mt-10">

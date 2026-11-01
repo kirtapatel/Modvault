@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 import {
   UploadCloud,
@@ -31,8 +30,6 @@ interface PendingFile {
 
 export function UploadForm() {
   const { status } = useSession();
-  const router = useRouter();
-
   const [step, setStep] = useState<Step>(1);
   const [error, setError] = useState("");
   const [submitting, setSubmitting] = useState(false);
@@ -60,16 +57,16 @@ export function UploadForm() {
   const game = GAMES.find((g) => g.slug === gameSlug) ?? GAMES[0];
 
   if (status === "loading") {
-    return <p className="text-center text-slate-500">Checking your session…</p>;
+    return <p className="text-center text-white/35">Checking your session…</p>;
   }
 
   if (status === "unauthenticated") {
     return (
-      <div className="rounded-3xl border border-slate-800 bg-slate-900/60 p-12 text-center">
-        <UploadCloud className="mx-auto h-12 w-12 text-slate-600" />
+      <div className="glass-card rounded-3xl p-12 text-center">
+        <UploadCloud className="mx-auto h-12 w-12 text-white/25" />
         <h2 className="mt-4 text-xl font-bold text-white">You must be signed in to upload</h2>
-        <p className="mt-1 text-sm text-slate-400">Create a free creator account to start sharing mods.</p>
-        <Link href="/register" className="mt-5 inline-block rounded-xl bg-gradient-to-r from-brand to-brand-hover px-6 py-3 font-bold text-white shadow-lg shadow-[#1bd96a]/25 hover:brightness-110">
+        <p className="mt-1 text-sm text-white/50">Create a free creator account to start sharing mods.</p>
+        <Link href="/register" className="mt-5 inline-block rounded-xl bg-gradient-to-r from-brand to-brand-hover px-6 py-3 font-bold text-white shadow-lg shadow-brand/25 hover:brightness-110">
           Create an Account
         </Link>
       </div>
@@ -240,11 +237,11 @@ export function UploadForm() {
 
   if (successUrl) {
     return (
-      <div className="rounded-3xl border border-emerald-500/40 bg-emerald-500/10 p-12 text-center">
-        <CheckCircle2 className="mx-auto h-14 w-14 text-emerald-400" />
+      <div className="rounded-3xl border border-brand/30 bg-brand/10 p-12 text-center">
+        <CheckCircle2 className="mx-auto h-14 w-14 text-brand-bright" />
         <h2 className="mt-4 text-2xl font-extrabold text-white">Mod published!</h2>
-        <p className="mt-2 text-sm text-slate-400">Your mod is now live on ModVault.</p>
-        <Link href={`/mod/${successUrl}`} className="mt-6 inline-block rounded-xl bg-gradient-to-r from-brand to-brand-hover px-6 py-3 font-bold text-white shadow-lg shadow-[#1bd96a]/25 hover:brightness-110">
+        <p className="mt-2 text-sm text-white/50">Your mod is now live on ModVault.</p>
+        <Link href={`/mod/${successUrl}`} className="mt-6 inline-block rounded-xl bg-gradient-to-r from-brand to-brand-hover px-6 py-3 font-bold text-white shadow-lg shadow-brand/25 hover:brightness-110">
           View your mod
         </Link>
       </div>
@@ -255,18 +252,18 @@ export function UploadForm() {
   const canNext2 = canNext1 && summary.trim().length > 0 && description.trim().length > 0;
 
   return (
-    <div className="rounded-3xl border border-slate-800 bg-slate-900/60 p-6 sm:p-8">
+    <div className="glass-card rounded-3xl p-6 sm:p-8">
       <div className="mb-8 flex items-center justify-between">
         {[1, 2, 3].map((s) => (
           <div key={s} className="flex flex-1 items-center">
             <div
               className={`flex h-9 w-9 items-center justify-center rounded-full text-sm font-bold transition-colors ${
-                step >= s ? "bg-gradient-to-br from-brand to-brand-hover text-white" : "bg-slate-800 text-slate-500"
+                step >= s ? "bg-gradient-to-br from-brand to-brand-hover text-white" : "bg-white/[0.06] text-white/35"
               }`}
             >
               {s}
             </div>
-            {s < 3 && <div className={`mx-2 h-0.5 flex-1 rounded ${step > s ? "bg-brand" : "bg-slate-800"}`} />}
+            {s < 3 && <div className={`mx-2 h-0.5 flex-1 rounded ${step > s ? "bg-brand" : "bg-white/[0.06]"}`} />}
           </div>
         ))}
       </div>
@@ -280,21 +277,21 @@ export function UploadForm() {
       {step === 1 && (
         <div className="space-y-5">
           <div>
-            <label className="mb-1.5 block text-sm font-semibold text-slate-300">Mod title *</label>
+            <label className="mb-1.5 block text-sm font-semibold text-white/70">Mod title *</label>
             <input
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="e.g. Realistic Vehicle Pack"
-              className="w-full rounded-xl border border-slate-700 bg-slate-800/60 px-4 py-3 text-sm text-white outline-none focus:border-brand"
+              className="w-full rounded-xl border border-white/15 bg-white/[0.04] px-4 py-3 text-sm text-white outline-none focus:border-brand"
             />
           </div>
           <div className="grid gap-5 sm:grid-cols-2">
             <div>
-              <label className="mb-1.5 block text-sm font-semibold text-slate-300">Game *</label>
+              <label className="mb-1.5 block text-sm font-semibold text-white/70">Game *</label>
               <select
                 value={gameSlug}
                 onChange={(e) => { setGameSlug(e.target.value); setSubcategory(GAMES.find((g) => g.slug === e.target.value)?.subcategories[0] ?? ""); }}
-                className="w-full rounded-xl border border-slate-700 bg-slate-800/60 px-4 py-3 text-sm text-white outline-none focus:border-brand"
+                className="w-full rounded-xl border border-white/15 bg-white/[0.04] px-4 py-3 text-sm text-white outline-none focus:border-brand"
               >
                 {GAMES.map((g) => (
                   <option key={g.slug} value={g.slug}>{g.name}</option>
@@ -302,11 +299,11 @@ export function UploadForm() {
               </select>
             </div>
             <div>
-              <label className="mb-1.5 block text-sm font-semibold text-slate-300">Category *</label>
+              <label className="mb-1.5 block text-sm font-semibold text-white/70">Category *</label>
               <select
                 value={subcategory}
                 onChange={(e) => setSubcategory(e.target.value)}
-                className="w-full rounded-xl border border-slate-700 bg-slate-800/60 px-4 py-3 text-sm text-white outline-none focus:border-brand"
+                className="w-full rounded-xl border border-white/15 bg-white/[0.04] px-4 py-3 text-sm text-white outline-none focus:border-brand"
               >
                 {game.subcategories.map((c) => (
                   <option key={c} value={c}>{c}</option>
@@ -315,7 +312,7 @@ export function UploadForm() {
             </div>
           </div>
           <div>
-            <label className="mb-1.5 block text-sm font-semibold text-slate-300">Tags</label>
+            <label className="mb-1.5 block text-sm font-semibold text-white/70">Tags</label>
             <div className="flex flex-wrap gap-2">
               {game.subcategories.concat(["4K", "Performance", "Realistic", "New", "Bugfix"]).map((t) => (
                 <button
@@ -323,7 +320,7 @@ export function UploadForm() {
                   type="button"
                   onClick={() => toggleTag(t)}
                   className={`rounded-full border px-3 py-1 text-xs font-medium transition-colors ${
-                    tags.includes(t) ? "border-brand bg-brand/20 text-brand" : "border-slate-700 text-slate-400 hover:border-brand/60"
+                    tags.includes(t) ? "border-brand bg-brand/20 text-brand" : "border-white/15 text-white/50 hover:border-brand/60"
                   }`}
                 >
                   {t}
@@ -336,13 +333,13 @@ export function UploadForm() {
                 onChange={(e) => setTagInput(e.target.value)}
                 onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); addTag(); } }}
                 placeholder="Add custom tag…"
-                className="flex-1 rounded-xl border border-slate-700 bg-slate-800/60 px-4 py-2 text-sm text-white outline-none focus:border-brand"
+                className="flex-1 rounded-xl border border-white/15 bg-white/[0.04] px-4 py-2 text-sm text-white outline-none focus:border-brand"
               />
-              <button type="button" onClick={addTag} className="rounded-xl bg-slate-800 px-4 text-sm font-semibold text-white hover:bg-slate-700">Add</button>
+              <button type="button" onClick={addTag} className="rounded-xl bg-white/[0.06] px-4 text-sm font-semibold text-white hover:bg-white/[0.08]">Add</button>
             </div>
           </div>
-          <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-5">
-            <label className="mb-1.5 block text-sm font-semibold text-slate-300">
+          <div className="glass-card rounded-2xl p-5">
+            <label className="mb-1.5 block text-sm font-semibold text-white/70">
               Mod photos (at least 1 required) *
             </label>
             <label className="flex cursor-pointer flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-brand/40 bg-brand/5 px-4 py-8 text-center transition-colors hover:border-brand hover:bg-brand/10">
@@ -350,7 +347,7 @@ export function UploadForm() {
               <span className="text-sm font-semibold text-white">
                 {uploadingPhotos ? "Uploading photos…" : "Click to choose photos"}
               </span>
-              <span className="text-xs text-slate-400">
+              <span className="text-xs text-white/50">
                 PNG / JPG — photos are shown on your mod page (hosted on imgbb)
               </span>
               <input
@@ -375,7 +372,7 @@ export function UploadForm() {
                     <button
                       type="button"
                       onClick={() => setPhotos((prev) => prev.filter((p) => p !== url))}
-                      className="absolute right-1.5 top-1.5 rounded-full bg-slate-950/80 p-1.5 text-slate-300 transition-colors hover:bg-red-500/90 hover:text-white"
+                      className="absolute right-1.5 top-1.5 rounded-full bg-black/80 p-1.5 text-white/70 transition-colors hover:bg-red-500/90 hover:text-white"
                       aria-label={`Remove photo ${i + 1}`}
                     >
                       <X className="h-3.5 w-3.5" />
@@ -396,33 +393,33 @@ export function UploadForm() {
       {step === 2 && (
         <div className="space-y-5">
           <div>
-            <label className="mb-1.5 block text-sm font-semibold text-slate-300">Short summary *</label>
+            <label className="mb-1.5 block text-sm font-semibold text-white/70">Short summary *</label>
             <input
               value={summary}
               onChange={(e) => setSummary(e.target.value)}
               maxLength={300}
               placeholder="One or two sentences describing your mod…"
-              className="w-full rounded-xl border border-slate-700 bg-slate-800/60 px-4 py-3 text-sm text-white outline-none focus:border-brand"
+              className="w-full rounded-xl border border-white/15 bg-white/[0.04] px-4 py-3 text-sm text-white outline-none focus:border-brand"
             />
-            <p className="mt-1 text-right text-xs text-slate-500">{summary.length}/300</p>
+            <p className="mt-1 text-right text-xs text-white/35">{summary.length}/300</p>
           </div>
           <div>
-            <label className="mb-1.5 block text-sm font-semibold text-slate-300">Description (Markdown supported) *</label>
+            <label className="mb-1.5 block text-sm font-semibold text-white/70">Description (Markdown supported) *</label>
             <textarea
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               rows={10}
               placeholder={"## Overview\n\nDescribe your mod…\n\n## Features\n\n- Feature 1\n- Feature 2\n\n## Installation\n\n1. Step\n2. Step"}
-              className="w-full resize-y rounded-xl border border-slate-700 bg-slate-800/60 px-4 py-3 font-mono text-sm text-white outline-none focus:border-brand"
+              className="w-full resize-y rounded-xl border border-white/15 bg-white/[0.04] px-4 py-3 font-mono text-sm text-white outline-none focus:border-brand"
             />
           </div>
           <div>
-            <label className="mb-1.5 block text-sm font-semibold text-slate-300">Game version compatibility</label>
+            <label className="mb-1.5 block text-sm font-semibold text-white/70">Game version compatibility</label>
             <input
               value={gameVersion}
               onChange={(e) => setGameVersion(e.target.value)}
               placeholder="e.g. 1.0.2944 or Any"
-              className="w-full rounded-xl border border-slate-700 bg-slate-800/60 px-4 py-3 text-sm text-white outline-none focus:border-brand"
+              className="w-full rounded-xl border border-white/15 bg-white/[0.04] px-4 py-3 text-sm text-white outline-none focus:border-brand"
             />
           </div>
         </div>
@@ -430,7 +427,7 @@ export function UploadForm() {
 
       {step === 3 && (
         <div className="space-y-5">
-          <div className="flex items-center gap-2 rounded-xl border border-slate-700 bg-slate-950/50 px-4 py-3 text-sm text-slate-300">
+          <div className="flex items-center gap-2 rounded-xl border border-white/15 bg-black/30 px-4 py-3 text-sm text-white/70">
             <UploadCloud className="h-5 w-5 shrink-0 text-brand" />
             Upload your file to{" "}
             <a href="https://www.mediafire.com" target="_blank" rel="noopener noreferrer" className="font-semibold text-brand hover:text-brand-hover">
@@ -439,17 +436,17 @@ export function UploadForm() {
             , copy the share link, then paste it below and press Enter (or click Add Link).
           </div>
 
-          <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-5">
-            <label className="mb-1.5 block text-sm font-semibold text-slate-300">MediaFire file link *</label>
+          <div className="glass-card rounded-2xl p-5">
+            <label className="mb-1.5 block text-sm font-semibold text-white/70">MediaFire file link *</label>
             <input
               value={newLink}
               onChange={(e) => setNewLink(e.target.value)}
               onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); addLink(); } }}
               placeholder="https://www.mediafire.com/file/..."
-              className="w-full rounded-xl border border-slate-700 bg-slate-800/60 px-4 py-3 text-sm text-white outline-none focus:border-brand"
+              className="w-full rounded-xl border border-white/15 bg-white/[0.04] px-4 py-3 text-sm text-white outline-none focus:border-brand"
             />
             {newLink.trim() && (
-              <p className={`mt-1.5 text-xs ${/^https?:\/\//i.test(newLink.trim()) && /mediafire\.com/i.test(newLink.trim()) ? "text-emerald-400" : "text-red-400"}`}>
+              <p className={`mt-1.5 text-xs ${/^https?:\/\//i.test(newLink.trim()) && /mediafire\.com/i.test(newLink.trim()) ? "text-brand-bright" : "text-red-400"}`}>
                 {/^https?:\/\//i.test(newLink.trim()) && /mediafire\.com/i.test(newLink.trim())
                   ? "Valid MediaFire link — press Enter or Add Link to confirm it."
                   : "That doesn't look like a MediaFire share link yet."}
@@ -457,38 +454,38 @@ export function UploadForm() {
             )}
             <div className="mt-3 grid gap-3 sm:grid-cols-3">
               <div>
-                <label className="mb-1 block text-xs font-semibold text-slate-400">File name</label>
+                <label className="mb-1 block text-xs font-semibold text-white/50">File name</label>
                 <input
                   value={newLinkName}
                   onChange={(e) => setNewLinkName(e.target.value)}
                   placeholder="my-mod.zip"
-                  className="w-full rounded-xl border border-slate-700 bg-slate-800/60 px-3 py-2 text-sm text-white outline-none focus:border-brand"
+                  className="w-full rounded-xl border border-white/15 bg-white/[0.04] px-3 py-2 text-sm text-white outline-none focus:border-brand"
                 />
               </div>
               <div>
-                <label className="mb-1 block text-xs font-semibold text-slate-400">Size (MB)</label>
+                <label className="mb-1 block text-xs font-semibold text-white/50">Size (MB)</label>
                 <input
                   value={newLinkSize}
                   onChange={(e) => setNewLinkSize(e.target.value)}
                   placeholder="e.g. 120"
                   type="number"
                   min="0"
-                  className="w-full rounded-xl border border-slate-700 bg-slate-800/60 px-3 py-2 text-sm text-white outline-none focus:border-brand"
+                  className="w-full rounded-xl border border-white/15 bg-white/[0.04] px-3 py-2 text-sm text-white outline-none focus:border-brand"
                 />
               </div>
               <div>
-                <label className="mb-1 block text-xs font-semibold text-slate-400">Version</label>
+                <label className="mb-1 block text-xs font-semibold text-white/50">Version</label>
                 <input
                   value={newLinkVersion}
                   onChange={(e) => setNewLinkVersion(e.target.value)}
                   placeholder="1.0"
-                  className="w-full rounded-xl border border-slate-700 bg-slate-800/60 px-3 py-2 text-sm text-white outline-none focus:border-brand"
+                  className="w-full rounded-xl border border-white/15 bg-white/[0.04] px-3 py-2 text-sm text-white outline-none focus:border-brand"
                 />
               </div>
             </div>
             <button
               onClick={addLink}
-              className="mt-3 flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-brand to-brand-hover px-5 py-2.5 text-sm font-bold text-white shadow-lg shadow-[#1bd96a]/25 transition-all hover:brightness-110"
+              className="mt-3 flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-brand to-brand-hover px-5 py-2.5 text-sm font-bold text-white shadow-lg shadow-brand/25 transition-all hover:brightness-110"
             >
               <Plus className="h-4 w-4" />
               Add Link
@@ -498,21 +495,21 @@ export function UploadForm() {
           {files.length > 0 && (
             <ul className="space-y-2">
               {files.map((f) => (
-                <li key={f.url} className="flex items-center justify-between rounded-xl border border-slate-800 bg-slate-950/50 px-4 py-2.5">
+                <li key={f.url} className="flex items-center justify-between rounded-xl border border-white/10 bg-black/30 px-4 py-2.5">
                   <div className="min-w-0">
-                    <span className="flex items-center gap-2 text-sm text-slate-300">
+                    <span className="flex items-center gap-2 text-sm text-white/70">
                       <Link2 className="h-4 w-4 shrink-0 text-brand" />
                       <span className="truncate">{f.name}</span>
                     </span>
-                    <a href={f.url} target="_blank" rel="noopener noreferrer" className="mt-0.5 block truncate text-xs text-slate-500 hover:text-brand">
+                    <a href={f.url} target="_blank" rel="noopener noreferrer" className="mt-0.5 block truncate text-xs text-white/35 hover:text-brand">
                       {f.url}
                     </a>
                   </div>
                   <div className="flex shrink-0 items-center gap-2 pl-3">
-                    <span className="text-xs text-slate-500">
+                    <span className="text-xs text-white/35">
                       {f.size ? `${(f.size / 1024 / 1024).toFixed(1)} MB` : "size n/a"} · v{f.version}
                     </span>
-                    <button onClick={() => setFiles((prev) => prev.filter((x) => x.url !== f.url))} className="text-slate-500 hover:text-red-400">
+                    <button onClick={() => setFiles((prev) => prev.filter((x) => x.url !== f.url))} className="text-white/35 hover:text-red-400">
                       <X className="h-4 w-4" />
                     </button>
                   </div>
@@ -521,18 +518,18 @@ export function UploadForm() {
             </ul>
           )}
 
-          <div className="flex items-center gap-2 rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-300">
+          <div className="flex items-center gap-2 rounded-xl border border-brand/30 bg-brand/10 px-4 py-3 text-sm text-brand-bright">
             <ShieldCheck className="h-5 w-5 shrink-0" />
             Visitors are redirected to MediaFire after the download countdown.
           </div>
         </div>
       )}
 
-      <div className="mt-8 flex items-center justify-between border-t border-slate-800 pt-6">
+      <div className="mt-8 flex items-center justify-between border-t border-white/10 pt-6">
         <button
           onClick={() => setStep((s) => (s > 1 ? (s - 1) as Step : s))}
           disabled={step === 1}
-          className="flex items-center gap-1 rounded-xl border border-slate-700 px-5 py-2.5 text-sm font-semibold text-slate-300 transition-colors hover:border-slate-500 disabled:opacity-30"
+          className="flex items-center gap-1 rounded-xl border border-white/15 px-5 py-2.5 text-sm font-semibold text-white/70 transition-colors hover:border-white/25 disabled:opacity-30"
         >
           <ChevronLeft className="h-4 w-4" />
           Back
@@ -540,7 +537,7 @@ export function UploadForm() {
         {step < 3 ? (
           <button
             onClick={() => { setError(""); if (step === 1 && !canNext1) { setError(title.trim() ? "Add at least one photo to continue." : "Give your mod a title to continue."); return; } if (step === 2 && !canNext2) { setError("Summary and description are required."); return; } setStep((s) => (s + 1) as Step); }}
-            className="flex items-center gap-1 rounded-xl bg-gradient-to-r from-brand to-brand-hover px-6 py-2.5 text-sm font-bold text-white shadow-lg shadow-[#1bd96a]/25 transition-all hover:brightness-110"
+            className="flex items-center gap-1 rounded-xl bg-gradient-to-r from-brand to-brand-hover px-6 py-2.5 text-sm font-bold text-white shadow-lg shadow-brand/25 transition-all hover:brightness-110"
           >
             Continue
             <ChevronRight className="h-4 w-4" />
@@ -549,7 +546,7 @@ export function UploadForm() {
           <button
             onClick={submit}
             disabled={submitting}
-            className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 px-6 py-2.5 text-sm font-bold text-white shadow-lg shadow-emerald-500/25 transition-all hover:brightness-110 disabled:opacity-50"
+            className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-brand to-brand-hover px-6 py-2.5 text-sm font-bold text-white shadow-lg shadow-brand/25 transition-all hover:brightness-110 disabled:opacity-50"
           >
             {submitting ? <Loader2 className="h-4 w-4 animate-spin" /> : <CheckCircle2 className="h-4 w-4" />}
             {submitting ? "Publishing…" : "Publish Mod"}

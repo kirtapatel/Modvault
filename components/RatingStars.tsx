@@ -13,7 +13,7 @@ export function RatingStars({ rating, size = 16 }: { rating: number; size?: numb
         if (i === full && hasHalf) {
           return <StarHalf key={i} style={{ width: size, height: size }} className="fill-amber-400 text-amber-400" />;
         }
-        return <Star key={i} style={{ width: size, height: size }} className="text-slate-700" />;
+        return <Star key={i} style={{ width: size, height: size }} className="text-white/15" />;
       })}
     </span>
   );

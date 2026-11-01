@@ -36,20 +36,27 @@ export async function GET(request: Request) {
     const fileByModId = new Map(fileDocs.map((file) => [String(file.mod), file.url || ""]));
 
     return NextResponse.json({
-      mods: docs.map((m: any) => ({
-        id: String(m._id),
-        title: m.title,
-        slug: m.slug,
-        game: m.game,
-        gameSlug: m.gameSlug,
-        subcategory: m.subcategory,
-        downloads: m.downloads || 0,
-        createdAt: (m.createdAt || new Date()).toISOString(),
-        creatorName: m.creator?.name ?? "Unknown",
-        creatorEmail: m.creator?.email ?? "",
-        virusChecked: m.virusChecked !== false,
-        mediaFireUrl: fileByModId.get(String(m._id)) ?? "",
-      })),
+      mods: docs.map((m) => {
+        const creator = m.creator as unknown as {
+          name?: string;
+          email?: string;
+        } | null;
+
+        return {
+          id: String(m._id),
+          title: m.title,
+          slug: m.slug,
+          game: m.game,
+          gameSlug: m.gameSlug,
+          subcategory: m.subcategory,
+          downloads: m.downloads || 0,
+          createdAt: (m.createdAt || new Date()).toISOString(),
+          creatorName: creator?.name ?? "Unknown",
+          creatorEmail: creator?.email ?? "",
+          virusChecked: m.virusChecked !== false,
+          mediaFireUrl: fileByModId.get(String(m._id)) ?? "",
+        };
+      }),
       total,
       page,
     });

@@ -48,18 +48,18 @@ export default async function GamePage({
 
   return (
     <main className="mx-auto max-w-7xl px-4 py-10 sm:px-6">
-      <nav className="mb-6 flex items-center gap-1.5 text-sm text-slate-400">
+      <nav className="mb-6 flex items-center gap-1.5 text-sm text-white/50">
         <Link href="/" className="hover:text-brand">Home</Link>
         <ChevronRight className="h-4 w-4" />
         <span className="text-white">{game.name}</span>
       </nav>
 
-      <div className="mb-8 overflow-hidden rounded-3xl border border-slate-800 bg-slate-900/60 p-8">
+      <div className="mb-8 glass-card overflow-hidden rounded-3xl p-8">
         <div className="flex items-center gap-4">
           <span className="text-5xl">{game.icon}</span>
           <div>
             <h1 className="text-3xl font-extrabold text-white sm:text-4xl">{game.name} Mods</h1>
-            <p className="mt-1 text-slate-400">{game.description}</p>
+            <p className="mt-1 text-white/50">{game.description}</p>
           </div>
         </div>
       </div>
@@ -80,7 +80,7 @@ export default async function GamePage({
               className={`shrink-0 whitespace-nowrap rounded-lg px-3 py-2 text-sm transition-colors ${
                 !subcategory
                   ? "bg-brand/15 font-semibold text-brand"
-                  : "text-slate-300 hover:bg-slate-800"
+                  : "text-white/70 hover:bg-white/[0.06]"
               }`}
             >
               All
@@ -92,7 +92,7 @@ export default async function GamePage({
                 className={`shrink-0 whitespace-nowrap rounded-lg px-3 py-2 text-sm transition-colors ${
                   subcategory === cat
                     ? "bg-brand/15 font-semibold text-brand"
-                    : "text-slate-300 hover:bg-slate-800"
+                    : "text-white/70 hover:bg-white/[0.06]"
                 }`}
               >
                 {cat}
@@ -111,7 +111,7 @@ export default async function GamePage({
           <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
             <h2 className="text-lg font-bold text-white">
               {subcategory ? `${subcategory} Mods` : "All Mods"}
-              <span className="ml-2 text-sm font-normal text-slate-500">({mods.length})</span>
+              <span className="ml-2 text-sm font-normal text-white/35">({mods.length})</span>
             </h2>
             <div className="flex items-center gap-2">
               {sortOptions.map((opt) => (
@@ -120,8 +120,8 @@ export default async function GamePage({
                   href={`/games/${gameSlug}${subcategory ? `?subcategory=${encodeURIComponent(subcategory)}&sort=${opt.value}` : `?sort=${opt.value}`}`}
                   className={`rounded-lg px-3 py-1.5 text-xs font-medium transition-colors ${
                     sort === opt.value
-                      ? "bg-[#1bd96a]/15 text-[#1bd96a] ring-1 ring-[#1bd96a]/40"
-                      : "text-slate-400 hover:bg-slate-800 hover:text-white"
+                      ? "bg-brand/15 text-brand-bright ring-1 ring-brand/40"
+                      : "text-white/50 hover:bg-white/[0.06] hover:text-white"
                   }`}
                 >
                   {opt.label}
@@ -131,7 +131,7 @@ export default async function GamePage({
           </div>
 
           {mods.length === 0 ? (
-            <div className="rounded-2xl border border-white/10 bg-slate-900/60 p-12 text-center text-slate-400">
+            <div className="glass-card rounded-2xl p-12 text-center text-white/50">
               No mods found in this category yet. Be the first to upload one!
             </div>
           ) : (

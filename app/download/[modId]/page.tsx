@@ -1,6 +1,5 @@
 import Link from "next/link";
-import { ExternalLink, ChevronRight, Download } from "lucide-react";
-import { getModBySlug } from "@/lib/data-access";
+import { ExternalLink, ChevronRight } from "lucide-react";
 import { formatBytes } from "@/lib/utils";
 import { AdBanner } from "@/components/AdBanner";
 import { DownloadGate } from "@/components/DownloadGate";
@@ -37,7 +36,7 @@ export default async function DownloadPage({ params }: { params: Promise<{ modId
 
   return (
     <main className="mx-auto max-w-4xl px-4 py-10 sm:px-6">
-      <nav className="mb-6 flex items-center gap-1.5 text-sm text-slate-400">
+      <nav className="mb-6 flex items-center gap-1.5 text-sm text-white/50">
         <Link href="/" className="hover:text-brand">Home</Link>
         <ChevronRight className="h-4 w-4" />
         <Link href={`/mod/${mod.slug}`} className="truncate hover:text-brand">{mod.title}</Link>
@@ -45,24 +44,24 @@ export default async function DownloadPage({ params }: { params: Promise<{ modId
         <span className="text-white">Download</span>
       </nav>
 
-      <div className="overflow-hidden rounded-3xl border border-slate-800 bg-slate-900/60 p-6 sm:p-8">
+      <div className="glass-card overflow-hidden rounded-3xl p-6 sm:p-8">
         <div className="mb-6 text-center">
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-500/15 px-3 py-1 text-xs font-bold text-emerald-400">
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-brand/10 px-3 py-1 text-xs font-bold text-brand-bright">
             <ExternalLink className="h-4 w-4" />
             Hosted on MediaFire
           </span>
           <h1 className="mt-3 text-xl font-extrabold text-white sm:text-2xl">{mod.title}</h1>
-          <p className="mt-1 text-sm text-slate-400">
+          <p className="mt-1 text-sm text-white/50">
             Version {file?.version ?? "1.0"} · {file ? formatBytes(file.sizeBytes) : "Unknown size"}
             {file?.gameVersion && <> · Works with game version {file.gameVersion}</>}
           </p>
         </div>
 
         <div className="rounded-2xl border border-dashed border-brand/40 bg-brand/5 p-6">
-          <DownloadGate modId={mod.id} slug={mod.slug} file={file ?? null} />
+          <DownloadGate slug={mod.slug} file={file ?? null} />
         </div>
 
-        <p className="mt-4 text-center text-xs text-slate-500">
+        <p className="mt-4 text-center text-xs text-white/35">
           By downloading you agree to the ModVault Terms of Service. Files are provided by independent creators.
         </p>
       </div>

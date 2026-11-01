@@ -42,7 +42,7 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ sl
     return NextResponse.json({ error: "Not authenticated." }, { status: 401 });
   }
   const { slug } = await params;
-  const body = await request.json();
+  const body = (await request.json()) as Record<string, unknown>;
 
   const mod = await Mod.findOne({ slug });
   if (!mod) return NextResponse.json({ error: "Mod not found." }, { status: 404 });
@@ -51,8 +51,9 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ sl
   }
 
   const updatable = ["title", "summary", "description", "subcategory", "tags", "gameVersion", "thumbnailUrl"];
+  const writable = mod as unknown as Record<string, unknown>;
   for (const key of updatable) {
-    if (body[key] !== undefined) (mod as any)[key] = body[key];
+    if (body[key] !== undefined) writable[key] = body[key];
   }
 
   if (body.fileUrl !== undefined) {

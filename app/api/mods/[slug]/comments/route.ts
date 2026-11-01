@@ -5,6 +5,7 @@ import Comment from "@/models/Comment";
 import User from "@/models/User";
 import Mod from "@/models/Mod";
 import { demoComments } from "@/lib/demo-data";
+import type { LeanComment, LeanUserPublic } from "@/lib/mongo-types";
 
 export async function GET(_request: Request, { params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
@@ -17,13 +18,18 @@ export async function GET(_request: Request, { params }: { params: Promise<{ slu
     const mod = await Mod.findOne({ slug });
     if (!mod) return NextResponse.json({ comments: [] });
 
-    const comments = await Comment.find({ mod: mod._id }).sort({ createdAt: 1 }).limit(100).lean();
-    const authors = await User.find({ _id: { $in: comments.map((c) => c.author) } }).select("name avatar").lean();
-    const authorMap = new Map(authors.map((a: any) => [String(a._id), a]));
+    const comments = (await Comment.find({ mod: mod._id })
+      .sort({ createdAt: 1 })
+      .limit(100)
+      .lean()) as unknown as LeanComment[];
+    const authors = (await User.find({ _id: { $in: comments.map((c) => c.author) } })
+      .select("name avatar")
+      .lean()) as unknown as LeanUserPublic[];
+    const authorMap = new Map(authors.map((a) => [String(a._id), a]));
 
     return NextResponse.json({
-      comments: comments.map((c: any) => {
-        const author: any = authorMap.get(String(c.author));
+      comments: comments.map((c) => {
+        const author = authorMap.get(String(c.author));
         return {
           id: String(c._id),
           modSlug: slug,
@@ -31,7 +37,7 @@ export async function GET(_request: Request, { params }: { params: Promise<{ slu
           authorId: String(c.author),
           avatar: author?.avatar ?? null,
           text: c.text,
-          createdAt: (c.createdAt || new Date()).toISOString(),
+          createdAt: new Date(c.createdAt || Date.now()).toISOString(),
         };
       }),
     });

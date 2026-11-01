@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import {
   LayoutDashboard,
   Boxes,
@@ -66,8 +67,6 @@ export function AdminPanel() {
   const [editingLink, setEditingLink] = useState("");
 
   async function loadAll() {
-    setLoading(true);
-    setError("");
     try {
       const [s, m, u, a] = await Promise.all([
         fetch("/api/admin/stats").then((r) => r.json()),
@@ -80,15 +79,25 @@ export function AdminPanel() {
       setUsers(u.users ?? []);
       setAdmins(a.admins ?? []);
       setIsOwner((await fetch("/api/admin/me").then((r) => r.json())).owner === true);
-    } catch (e) {
+    } catch {
       setError("Failed to load admin data.");
     } finally {
       setLoading(false);
     }
   }
 
+  async function refresh() {
+    setLoading(true);
+    setError("");
+    await loadAll();
+  }
+
   useEffect(() => {
-    loadAll();
+    const timer = setTimeout(() => {
+      void loadAll();
+    }, 0);
+
+    return () => clearTimeout(timer);
   }, []);
 
   async function deleteMod(id: string) {
@@ -217,7 +226,7 @@ export function AdminPanel() {
             className={`flex shrink-0 items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition-colors lg:w-full ${
               tab === t.id
                 ? "bg-gradient-to-r from-brand to-brand-hover text-white"
-                : "text-slate-400 hover:bg-slate-800 hover:text-white"
+                : "text-white/50 hover:bg-white/[0.06] hover:text-white"
             }`}
           >
             <t.icon className="h-4 w-4" />
@@ -235,7 +244,7 @@ export function AdminPanel() {
         )}
 
         {loading ? (
-          <p className="flex items-center gap-2 text-slate-500">
+          <p className="flex items-center gap-2 text-white/35">
             <Loader2 className="h-4 w-4 animate-spin" /> Loading…
           </p>
         ) : (
@@ -246,13 +255,13 @@ export function AdminPanel() {
                   {[
                     { label: "Total Mods", value: formatNumber(stats.mods), icon: Boxes, color: "text-brand" },
                     { label: "Total Users", value: formatNumber(stats.users), icon: Users, color: "text-sky-400" },
-                    { label: "Admins", value: formatNumber(stats.admins), icon: ShieldCheck, color: "text-emerald-400" },
+                    { label: "Admins", value: formatNumber(stats.admins), icon: ShieldCheck, color: "text-brand-bright" },
                     { label: "Total Downloads", value: formatNumber(stats.downloads), icon: LayoutDashboard, color: "text-brand" },
                   ].map(({ label, value, icon: Icon, color }) => (
-                    <div key={label} className="rounded-2xl border border-slate-800 bg-slate-900/60 p-5">
+                    <div key={label} className="glass-card rounded-2xl p-5">
                       <Icon className={`h-6 w-6 ${color}`} />
                       <p className="mt-3 text-2xl font-extrabold text-white">{value}</p>
-                      <p className="text-xs text-slate-500">{label}</p>
+                      <p className="text-xs text-white/35">{label}</p>
                     </div>
                   ))}
                 </div>
@@ -261,19 +270,19 @@ export function AdminPanel() {
                   <h3 className="mb-3 flex items-center gap-2 text-lg font-bold text-white">
                     <Boxes className="h-5 w-5 text-brand" /> Latest Uploads
                   </h3>
-                  <div className="rounded-2xl border border-slate-800 bg-slate-900/60">
+                  <div className="glass-card rounded-2xl">
                     {stats.latestMods.length === 0 ? (
-                      <p className="p-6 text-sm text-slate-500">No mods yet.</p>
+                      <p className="p-6 text-sm text-white/35">No mods yet.</p>
                     ) : (
                       stats.latestMods.map((m) => (
-                        <div key={m.id} className="flex items-center justify-between gap-3 border-b border-slate-800 px-4 py-3 last:border-0">
+                        <div key={m.id} className="flex items-center justify-between gap-3 border-b border-white/10 px-4 py-3 last:border-0">
                           <div className="min-w-0">
                             <p className="truncate text-sm font-semibold text-white">{m.title}</p>
-                            <p className="text-xs text-slate-500">
+                            <p className="text-xs text-white/35">
                               {m.game} · by {m.creatorName} · {formatNumber(m.downloads)} downloads
                             </p>
                           </div>
-                          <span className="shrink-0 text-xs text-slate-500">{timeAgo(m.createdAt)}</span>
+                          <span className="shrink-0 text-xs text-white/35">{timeAgo(m.createdAt)}</span>
                         </div>
                       ))
                     )}
@@ -285,25 +294,25 @@ export function AdminPanel() {
             {tab === "mods" && (
               <div>
                 <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                  <p className="text-sm text-slate-400">{mods.length} mods · search to filter</p>
+                  <p className="text-sm text-white/50">{mods.length} mods · search to filter</p>
                   <div className="relative w-full sm:w-64">
-                    <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" />
+                    <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-white/35" />
                     <input
                       value={search}
                       onChange={(e) => setSearch(e.target.value)}
                       placeholder="Search mods…"
-                      className="w-full rounded-xl border border-slate-700 bg-slate-800/60 py-2 pl-9 pr-3 text-sm text-white outline-none focus:border-brand"
+                      className="w-full rounded-xl border border-white/15 bg-white/[0.04] py-2 pl-9 pr-3 text-sm text-white outline-none focus:border-brand"
                     />
                   </div>
                 </div>
 
-                <div className="overflow-x-auto rounded-2xl border border-slate-800 bg-slate-900/60">
+                <div className="overflow-x-auto glass-card rounded-2xl">
                   {filteredMods.length === 0 ? (
-                    <p className="p-6 text-sm text-slate-500">No mods found.</p>
+                    <p className="p-6 text-sm text-white/35">No mods found.</p>
                   ) : (
                     <table className="w-full min-w-[900px] text-left text-sm">
                       <thead>
-                        <tr className="border-b border-slate-800 text-xs uppercase tracking-wider text-slate-500">
+                        <tr className="border-b border-white/10 text-xs uppercase tracking-wider text-white/35">
                           <th className="px-4 py-3">Mod</th>
                           <th className="px-4 py-3">Creator</th>
                           <th className="px-4 py-3">Downloads</th>
@@ -314,13 +323,13 @@ export function AdminPanel() {
                       </thead>
                       <tbody>
                         {filteredMods.map((m) => (
-                          <tr key={m.id} className="border-b border-slate-800/60 last:border-0 hover:bg-slate-800/30">
+                          <tr key={m.id} className="border-b border-white/10/60 last:border-0 hover:bg-white/[0.06]/30">
                             <td className="px-4 py-3">
                               <p className="font-semibold text-white">{m.title}</p>
-                              <p className="text-xs text-slate-500">{m.game} · {m.subcategory}</p>
+                              <p className="text-xs text-white/35">{m.game} · {m.subcategory}</p>
                             </td>
-                            <td className="px-4 py-3 text-slate-300">{m.creatorName}</td>
-                            <td className="px-4 py-3 text-slate-300">{formatNumber(m.downloads)}</td>
+                            <td className="px-4 py-3 text-white/70">{m.creatorName}</td>
+                            <td className="px-4 py-3 text-white/70">{formatNumber(m.downloads)}</td>
                             <td className="max-w-[280px] px-4 py-3">
                               {editingModId === m.id ? (
                                 <div className="flex min-w-[260px] items-center gap-2">
@@ -328,13 +337,13 @@ export function AdminPanel() {
                                     value={editingLink}
                                     onChange={(e) => setEditingLink(e.target.value)}
                                     placeholder="https://www.mediafire.com/file/..."
-                                    className="min-w-0 flex-1 rounded-lg border border-slate-700 bg-slate-800/60 px-2.5 py-1.5 text-xs text-white outline-none focus:border-brand"
+                                    className="min-w-0 flex-1 rounded-lg border border-white/15 bg-white/[0.04] px-2.5 py-1.5 text-xs text-white outline-none focus:border-brand"
                                     aria-label={`MediaFire link for ${m.title}`}
                                   />
                                   <button
                                     onClick={() => saveMediaFireLink(m.id)}
                                     disabled={busy}
-                                    className="inline-flex shrink-0 items-center gap-1 rounded-lg bg-emerald-500/15 px-2.5 py-1.5 text-xs font-semibold text-emerald-300 hover:bg-emerald-500/25 disabled:opacity-40"
+                                    className="inline-flex shrink-0 items-center gap-1 rounded-lg bg-brand/10 px-2.5 py-1.5 text-xs font-semibold text-brand-bright hover:bg-brand/20 disabled:opacity-40"
                                   >
                                     <Save className="h-3.5 w-3.5" /> Save
                                   </button>
@@ -353,28 +362,28 @@ export function AdminPanel() {
                                       <span className="truncate">{m.mediaFireUrl}</span>
                                     </a>
                                   ) : (
-                                    <span className="text-xs text-slate-600">No link</span>
+                                    <span className="text-xs text-white/25">No link</span>
                                   )}
                                   <button
                                     onClick={() => startLinkEdit(m)}
                                     disabled={busy}
-                                    className="shrink-0 rounded-lg px-2 py-1.5 text-xs font-semibold text-slate-400 hover:bg-slate-800 hover:text-white disabled:opacity-40"
+                                    className="shrink-0 rounded-lg px-2 py-1.5 text-xs font-semibold text-white/50 hover:bg-white/[0.06] hover:text-white disabled:opacity-40"
                                   >
                                     Edit
                                   </button>
                                 </div>
                               )}
                             </td>
-                            <td className="px-4 py-3 text-slate-400">{timeAgo(m.createdAt)}</td>
+                            <td className="px-4 py-3 text-white/50">{timeAgo(m.createdAt)}</td>
                             <td className="px-4 py-3">
                               <div className="flex justify-end gap-2">
-                                <a href={`/mod/${m.slug}`} className="rounded-lg bg-slate-800 px-3 py-1.5 text-xs font-semibold text-white hover:bg-slate-700">
+                                <a href={`/mod/${m.slug}`} className="rounded-lg bg-white/[0.06] px-3 py-1.5 text-xs font-semibold text-white hover:bg-white/[0.08]">
                                   View
                                 </a>
                                 <button
                                   onClick={() => deleteMod(m.id)}
                                   disabled={busy}
-                                  className="rounded-lg p-1.5 text-slate-500 transition-colors hover:bg-red-500/10 hover:text-red-400"
+                                  className="rounded-lg p-1.5 text-white/35 transition-colors hover:bg-red-500/10 hover:text-red-400"
                                   title="Delete mod"
                                 >
                                   <Trash2 className="h-4 w-4" />
@@ -392,14 +401,14 @@ export function AdminPanel() {
 
             {tab === "users" && (
               <div>
-                <p className="mb-4 text-sm text-slate-400">{users.length} users</p>
-                <div className="overflow-x-auto rounded-2xl border border-slate-800 bg-slate-900/60">
+                <p className="mb-4 text-sm text-white/50">{users.length} users</p>
+                <div className="overflow-x-auto glass-card rounded-2xl">
                   {users.length === 0 ? (
-                    <p className="p-6 text-sm text-slate-500">No users yet.</p>
+                    <p className="p-6 text-sm text-white/35">No users yet.</p>
                   ) : (
                     <table className="w-full min-w-[500px] text-left text-sm">
                       <thead>
-                        <tr className="border-b border-slate-800 text-xs uppercase tracking-wider text-slate-500">
+                        <tr className="border-b border-white/10 text-xs uppercase tracking-wider text-white/35">
                           <th className="px-4 py-3">User</th>
                           <th className="px-4 py-3">Joined</th>
                           <th className="px-4 py-3 text-right">Actions</th>
@@ -407,17 +416,17 @@ export function AdminPanel() {
                       </thead>
                       <tbody>
                         {users.map((u) => (
-                          <tr key={u.id} className="border-b border-slate-800/60 last:border-0 hover:bg-slate-800/30">
+                          <tr key={u.id} className="border-b border-white/10/60 last:border-0 hover:bg-white/[0.06]/30">
                             <td className="px-4 py-3">
                               <p className="font-semibold text-white">{u.name}</p>
-                              <p className="text-xs text-slate-500">{u.email}</p>
+                              <p className="text-xs text-white/35">{u.email}</p>
                             </td>
-                            <td className="px-4 py-3 text-slate-400">{timeAgo(u.createdAt)}</td>
+                            <td className="px-4 py-3 text-white/50">{timeAgo(u.createdAt)}</td>
                             <td className="px-4 py-3 text-right">
                               <button
                                 onClick={() => deleteUser(u.id)}
                                 disabled={busy}
-                                className="rounded-lg p-1.5 text-slate-500 transition-colors hover:bg-red-500/10 hover:text-red-400"
+                                className="rounded-lg p-1.5 text-white/35 transition-colors hover:bg-red-500/10 hover:text-red-400"
                                 title="Delete user"
                               >
                                 <Trash2 className="h-4 w-4" />
@@ -434,32 +443,32 @@ export function AdminPanel() {
 
             {tab === "admins" && (
               <div>
-                <p className="mb-4 text-sm text-slate-400">
+                <p className="mb-4 text-sm text-white/50">
                   Administrators can access the panel. {isOwner ? "You are the owner and can add/remove admins." : "Only the owner can add or remove admins."}
                 </p>
 
-                <div className="mb-6 rounded-2xl border border-slate-800 bg-slate-900/60 p-5">
+                <div className="mb-6 glass-card rounded-2xl p-5">
                   <div className="flex flex-col gap-2 sm:flex-row">
                     <input
                       value={newAdminEmail}
                       onChange={(e) => setNewAdminEmail(e.target.value)}
                       placeholder="admin@example.com"
                       disabled={!isOwner}
-                      className="flex-1 rounded-xl border border-slate-700 bg-slate-800/60 px-4 py-2.5 text-sm text-white outline-none focus:border-brand disabled:opacity-40"
+                      className="flex-1 rounded-xl border border-white/15 bg-white/[0.04] px-4 py-2.5 text-sm text-white outline-none focus:border-brand disabled:opacity-40"
                     />
                     <button
                       onClick={addAdmin}
                       disabled={busy || !isOwner}
-                      className="flex items-center justify-center gap-1.5 rounded-xl bg-gradient-to-r from-brand to-brand-hover px-5 py-2.5 text-sm font-bold text-white shadow-lg shadow-[#1bd96a]/25 transition-all hover:brightness-110 disabled:opacity-40"
+                      className="flex items-center justify-center gap-1.5 rounded-xl bg-gradient-to-r from-brand to-brand-hover px-5 py-2.5 text-sm font-bold text-white shadow-lg shadow-brand/25 transition-all hover:brightness-110 disabled:opacity-40"
                     >
                       <Plus className="h-4 w-4" /> Add Admin
                     </button>
                   </div>
                 </div>
 
-                <div className="rounded-2xl border border-slate-800 bg-slate-900/60">
+                <div className="glass-card rounded-2xl">
                   {admins.map((email) => (
-                    <div key={email} className="flex items-center justify-between gap-3 border-b border-slate-800 px-4 py-3 last:border-0">
+                    <div key={email} className="flex items-center justify-between gap-3 border-b border-white/10 px-4 py-3 last:border-0">
                       <span className="flex items-center gap-2 text-sm font-semibold text-white">
                         {email === "pkirtan546@gmail.com" && <Crown className="h-4 w-4 text-amber-400" />}
                         {email}
@@ -470,7 +479,7 @@ export function AdminPanel() {
                       <button
                         onClick={() => removeAdmin(email)}
                         disabled={busy || !isOwner || email === "pkirtan546@gmail.com"}
-                        className="rounded-lg p-1.5 text-slate-500 transition-colors hover:bg-red-500/10 hover:text-red-400 disabled:cursor-not-allowed disabled:opacity-30"
+                        className="rounded-lg p-1.5 text-white/35 transition-colors hover:bg-red-500/10 hover:text-red-400 disabled:cursor-not-allowed disabled:opacity-30"
                         title="Remove admin"
                       >
                         <Trash2 className="h-4 w-4" />
@@ -480,8 +489,8 @@ export function AdminPanel() {
                 </div>
 
                 <button
-                  onClick={loadAll}
-                  className="mt-4 flex items-center gap-1.5 text-sm text-slate-400 transition-colors hover:text-white"
+                  onClick={refresh}
+                  className="mt-4 flex items-center gap-1.5 text-sm text-white/50 transition-colors hover:text-white"
                 >
                   <RefreshCw className="h-3.5 w-3.5" /> Refresh
                 </button>
@@ -491,9 +500,9 @@ export function AdminPanel() {
         )}
 
         <div className="mt-8 flex items-center justify-end">
-          <a href="/" className="flex items-center gap-1 text-sm text-slate-500 transition-colors hover:text-brand">
+          <Link href="/" className="flex items-center gap-1 text-sm text-white/35 transition-colors hover:text-brand">
             Back to site <ChevronRight className="h-3.5 w-3.5" />
-          </a>
+          </Link>
         </div>
       </section>
     </div>

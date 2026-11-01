@@ -1,12 +1,11 @@
-import type { Metadata } from "next";
-import { Inter, Geist_Mono } from "next/font/google";
+import type { Metadata, Viewport } from "next";
+import { Inter, Syne, Geist_Mono } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
 import { Providers } from "@/components/Providers";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { MobileAdBar } from "@/components/MobileAdBar";
-import { SceneBackground } from "@/components/three/SceneBackground";
 import { SceneLoader } from "@/components/three/SceneLoader";
 
 const inter = Inter({
@@ -14,10 +13,20 @@ const inter = Inter({
   subsets: ["latin"],
 });
 
+const syne = Syne({
+  variable: "--font-syne",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800"],
+});
+
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
 });
+
+export const viewport: Viewport = {
+  themeColor: "#020202",
+};
 
 export const metadata: Metadata = {
   title: "ModVault — Download Game Mods",
@@ -31,9 +40,9 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${inter.variable} ${syne.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="flex min-h-full flex-col text-foreground pb-20 md:pb-0">
+      <body className="flex min-h-full flex-col bg-background text-foreground pb-20 md:pb-0">
         <Script
           async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4139158793021578"
@@ -54,7 +63,6 @@ export default function RootLayout({
           `}
         </Script>
         <Providers>
-          <SceneBackground />
           <SceneLoader />
           <div className="relative z-10 flex min-h-full flex-1 flex-col">
             <Navbar />

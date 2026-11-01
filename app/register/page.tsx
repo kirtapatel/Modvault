@@ -8,7 +8,7 @@ import { UserPlus, Loader2 } from "lucide-react";
 
 export default function RegisterPage() {
   return (
-    <Suspense fallback={<p className="text-center text-slate-500">Loading…</p>}>
+    <Suspense fallback={<p className="text-center text-white/35">Loading…</p>}>
       <RegisterForm />
     </Suspense>
   );
@@ -74,13 +74,13 @@ function RegisterForm() {
 
   return (
     <main className="mx-auto flex max-w-md flex-col px-4 py-16 sm:px-6">
-      <div className="rounded-3xl border border-slate-800 bg-slate-900/60 p-8">
+      <div className="glass-card rounded-3xl p-8">
         <div className="mb-6 text-center">
-          <div className="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-brand to-brand-hover shadow-xl shadow-[#1bd96a]/30">
+          <div className="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-brand to-brand-hover shadow-xl shadow-brand/30">
             <UserPlus className="h-7 w-7 text-white" />
           </div>
           <h1 className="text-2xl font-extrabold text-white">Join ModVault</h1>
-          <p className="mt-1 text-sm text-slate-400">Create a free account to upload and save mods</p>
+          <p className="mt-1 text-sm text-white/50">Create a free account to upload and save mods</p>
         </div>
 
         {error && (
@@ -91,59 +91,59 @@ function RegisterForm() {
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="mb-1.5 block text-sm font-semibold text-slate-300">Username</label>
+            <label className="mb-1.5 block text-sm font-semibold text-white/70">Username</label>
             <input
               required
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="e.g. ModMaster"
-              className="w-full rounded-xl border border-slate-700 bg-slate-800/60 px-4 py-3 text-sm text-white outline-none focus:border-brand"
+              className="w-full rounded-xl border border-white/15 bg-white/[0.04] px-4 py-3 text-sm text-white outline-none focus:border-brand"
             />
           </div>
           <div>
-            <label className="mb-1.5 block text-sm font-semibold text-slate-300">Email</label>
+            <label className="mb-1.5 block text-sm font-semibold text-white/70">Email</label>
             <input
               type="email"
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="you@example.com"
-              className="w-full rounded-xl border border-slate-700 bg-slate-800/60 px-4 py-3 text-sm text-white outline-none focus:border-brand"
+              className="w-full rounded-xl border border-white/15 bg-white/[0.04] px-4 py-3 text-sm text-white outline-none focus:border-brand"
             />
           </div>
           <div>
-            <label className="mb-1.5 block text-sm font-semibold text-slate-300">Password</label>
+            <label className="mb-1.5 block text-sm font-semibold text-white/70">Password</label>
             <input
               type="password"
               required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="At least 8 characters"
-              className="w-full rounded-xl border border-slate-700 bg-slate-800/60 px-4 py-3 text-sm text-white outline-none focus:border-brand"
+              className="w-full rounded-xl border border-white/15 bg-white/[0.04] px-4 py-3 text-sm text-white outline-none focus:border-brand"
             />
           </div>
           <div>
-            <label className="mb-1.5 block text-sm font-semibold text-slate-300">Confirm password</label>
+            <label className="mb-1.5 block text-sm font-semibold text-white/70">Confirm password</label>
             <input
               type="password"
               required
               value={confirm}
               onChange={(e) => setConfirm(e.target.value)}
               placeholder="Repeat your password"
-              className="w-full rounded-xl border border-slate-700 bg-slate-800/60 px-4 py-3 text-sm text-white outline-none focus:border-brand"
+              className="w-full rounded-xl border border-white/15 bg-white/[0.04] px-4 py-3 text-sm text-white outline-none focus:border-brand"
             />
           </div>
           <button
             type="submit"
             disabled={loading}
-            className="flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-brand to-brand-hover py-3 font-bold text-white shadow-lg shadow-[#1bd96a]/25 transition-all hover:shadow-[0_0_20px_rgba(27,217,106,0.4)] disabled:opacity-50"
+            className="flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-brand to-brand-hover py-3 font-bold text-white shadow-lg shadow-brand/25 transition-all hover:shadow-[0_0_20px_rgba(191,68,23,0.4)] disabled:opacity-50"
           >
             {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <UserPlus className="h-4 w-4" />}
             {loading ? "Creating account…" : "Create Account"}
           </button>
         </form>
 
-        <p className="mt-6 text-center text-sm text-slate-400">
+        <p className="mt-6 text-center text-sm text-white/50">
           Already have an account?{" "}
           <Link href={`/login?callbackUrl=${encodeURIComponent(callbackUrl)}`} className="font-semibold text-brand hover:text-brand-hover">
             Sign in

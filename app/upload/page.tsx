@@ -14,11 +14,11 @@ export default function UploadPage() {
         <h1 className="text-3xl font-extrabold text-white">
           Upload a <span className="glow-text">Mod</span>
         </h1>
-        <p className="mt-2 text-sm text-slate-400">
+        <p className="mt-2 text-sm text-white/50">
           Share your creation with the world. Your download links are hosted on MediaFire.
         </p>
       </div>
-      <Suspense fallback={<p className="text-center text-slate-500">Loading upload form…</p>}>
+      <Suspense fallback={<p className="text-center text-white/35">Loading upload form…</p>}>
         <UploadForm />
       </Suspense>
     </main>

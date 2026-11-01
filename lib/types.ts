@@ -61,7 +61,7 @@ export const GAMES: GameCategory[] = [
     name: "GTA 5",
     description: "Seamless mods for Grand Theft Auto V",
     icon: "🚗",
-    gradient: "from-orange-500 to-rose-600",
+    gradient: "from-[#bf4417]/35 via-[#1a0b06] to-black",
     subcategories: ["Vehicles", "Scripts", "Maps", "Weapons", "Skins", "Visuals"],
   },
   {
@@ -69,7 +69,7 @@ export const GAMES: GameCategory[] = [
     name: "Minecraft",
     description: "The world's most modded game",
     icon: "⛏️",
-    gradient: "from-emerald-500 to-green-700",
+    gradient: "from-[#d97706]/30 via-[#1a1408] to-black",
     subcategories: ["Mods", "Texture Packs", "Maps", "Shaders", "Data Packs", "Skins"],
   },
   {
@@ -77,7 +77,7 @@ export const GAMES: GameCategory[] = [
     name: "Skyrim",
     description: "Skyrim Special Edition overhaul mods",
     icon: "🏔️",
-    gradient: "from-sky-500 to-indigo-700",
+    gradient: "from-[#7c2d12]/40 via-[#150c08] to-black",
     subcategories: ["Overhauls", "Gameplay", "Graphics", "Armor & Weapons", "Quests", "UI"],
   },
 ];

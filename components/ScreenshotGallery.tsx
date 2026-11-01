@@ -36,13 +36,13 @@ export function ScreenshotGallery({ images }: { images: string[] }) {
 
       {active !== null && images[active] && (
         <div
-          className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-950/90 p-4 backdrop-blur-sm"
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 p-4 backdrop-blur-sm"
           onClick={() => setActive(null)}
         >
           <button
             type="button"
             onClick={() => setActive(null)}
-            className="absolute right-4 top-4 rounded-full bg-slate-800/80 p-2 text-slate-200 transition-colors hover:bg-slate-700"
+            className="absolute right-4 top-4 rounded-full bg-white/[0.06] p-2 text-white/80 transition-colors hover:bg-white/[0.08]"
             aria-label="Close photo viewer"
           >
             <X className="h-5 w-5" />
@@ -53,7 +53,7 @@ export function ScreenshotGallery({ images }: { images: string[] }) {
               e.stopPropagation();
               setActive((active - 1 + images.length) % images.length);
             }}
-            className="absolute left-3 rounded-full bg-slate-800/80 p-2 text-slate-200 transition-colors hover:bg-brand sm:left-6"
+            className="absolute left-3 rounded-full bg-white/[0.06] p-2 text-white/80 transition-colors hover:bg-brand sm:left-6"
             aria-label="Previous photo"
           >
             <ChevronLeft className="h-6 w-6" />
@@ -64,7 +64,7 @@ export function ScreenshotGallery({ images }: { images: string[] }) {
               e.stopPropagation();
               setActive((active + 1) % images.length);
             }}
-            className="absolute right-3 rounded-full bg-slate-800/80 p-2 text-slate-200 transition-colors hover:bg-brand sm:right-6"
+            className="absolute right-3 rounded-full bg-white/[0.06] p-2 text-white/80 transition-colors hover:bg-brand sm:right-6"
             aria-label="Next photo"
           >
             <ChevronRight className="h-6 w-6" />

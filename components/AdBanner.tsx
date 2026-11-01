@@ -14,12 +14,12 @@ export function AdBanner({
 
   return (
     <div
-      className={`${sizes[variant]} mx-auto flex flex-col items-center justify-center rounded-xl border border-dashed border-white/10 bg-[#161d26]`}
+      className={`${sizes[variant]} mx-auto flex flex-col items-center justify-center rounded-xl border border-dashed border-white/10 bg-white/[0.02]`}
     >
-      <p className="px-3 text-center text-[11px] font-semibold uppercase tracking-widest text-slate-500">
+      <p className="px-3 text-center text-[11px] font-semibold uppercase tracking-widest text-white/30">
         {label}
       </p>
-      <p className="mt-1 px-3 text-center text-xs text-slate-600">
+      <p className="mt-1 px-3 text-center text-xs text-white/20">
         728x90 · Replace this ad slot with your ad network
       </p>
     </div>
